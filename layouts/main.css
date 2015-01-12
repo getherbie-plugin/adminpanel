@@ -56,7 +56,7 @@ The content `<div>` is where all your content goes.
     margin: 0;
     color: #333;
     text-align: left;
-    padding: 2.5em 2em 0;
+    padding: 1em 2em 0 2em;
     /*border-bottom: 1px solid #eee;*/
 }
 .header h1 {
@@ -312,7 +312,7 @@ div.alert-info {
     border-color: #BCE8F1;
 }
 div.alert-success {
-    background: #5CB85C;
+    background:rgba(92, 184, 92, 0.9);
     color:#ffffff;
 }
 div.alert-error {

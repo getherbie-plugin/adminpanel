@@ -15,7 +15,8 @@ class PageController extends Controller
         $tree = $this->getPageTree()->findByRoute($route);
         return $this->render('page/index.twig', [
             'tree' => $tree,
-            'cancel' => $route
+            'cancel' => $route,
+            'breadcrumb' => $route
         ]);
     }
 

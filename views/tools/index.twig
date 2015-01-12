@@ -10,7 +10,7 @@
         {% for key, dir in cacheDirs %}
             <tr>
                 <td>{{ dir.label }}</td>
-                <td>{{ dir.count }} Datei(en)</td>
+                <td><span class="count">{{ dir.count }}</span> Datei(en)</td>
                 <td width="10%"><button class="pure-button button-small delete-cache" data-cache="{{ key }}">Leeren</button></td>
             </tr>
         {% endfor %}
@@ -34,13 +34,15 @@
         $(document).ready(function () {
             // Delete cache
             $(document).on("click", "button.delete-cache", function () {
-                var name = $(this).attr('data-cache');
+                var btn = $(this);
+                var name = btn.attr('data-cache');
                 $.ajax({
                     type: "POST",
                     url: "?action=tools/deletecache",
                     data: {name: name}
                 }).success(function (message) {
                     $('div.alert-success').text(message).slideDown(50);
+                    btn.parent().parent().find('span.count').text('0');
                 }).error(function (jqXHR, textStatus, errorThrown) {
                     $('div.alert-error').text(jqXHR.responseText).slideDown(50);
                 });

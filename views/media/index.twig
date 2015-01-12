@@ -1,7 +1,8 @@
 {% extends "@plugin/adminpanel/layouts/main.twig" %}
 {% import "@plugin/adminpanel/views/macro.grid.twig" as grid %}
 
-{% block title %}Media{% endblock %}
+{% block title %}Dateiablage{% endblock %}
+{% block subtitle %}Pfad: media{% if dir %}/{{ dir }}{% endif %}{% endblock %}
 
 {% block content %}
 
