@@ -97,14 +97,20 @@
 {% block jquery %}{% endblock %}
 <script>
     $(document).ready(function () {
+        function alertSlideUp() {
+            if ($('div.alert').is(":visible")) {
+                $('div.alert').slideUp(50);
+            }
+        };
         $("textarea").autosize();
         $(document).on("click", "html", function () {
             if ($('a.delete-confirmed').is(":visible")) {
                 $('a.delete-confirmed').removeClass('delete-confirmed');
             }
-            if ($('div.alert').is(":visible")) {
-                $('div.alert').slideUp(50);
-            }
+            alertSlideUp();
+        });
+        $(window).scroll(function() {
+            alertSlideUp();
         });
     });
 </script>
