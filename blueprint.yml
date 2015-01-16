@@ -5,6 +5,9 @@ layouts:
         segments:
             '': Inhalt
 fields:
+    path:
+        label: Pfad
+        type: label
     title:
         label: Titel
         type: text

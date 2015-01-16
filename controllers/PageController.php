@@ -16,25 +16,42 @@ class PageController extends Controller
         return $this->render('page/index.twig', [
             'tree' => $tree,
             'cancel' => $route,
-            'breadcrumb' => $route
+            'breadcrumb' => $route,
+            'parent' => $route // for macro.grid.addblock_js()
         ]);
     }
 
     public function addAction($query, $request)
     {
         $title = $request->get('name');
+        $parent = $request->get('parent');
         if(empty($title)) {
             $this->sendErrorHeader("Bitte einen Namen eingeben.");
         }
+
         $filename = FilesystemHelper::sanitizeFilename($title);
-        $filepath = $this->app['alias']->get("@page/{$filename}.md");
+        #$parent = FilesystemHelper::sanitizeFilename($parent);
+
+        $parentRoute = $this->getPageTree()->findByRoute($parent);
+
+        if($parentRoute->isRoot()) {
+            $filepath = $this->app['alias']->get("@page/{$filename}.md");
+        } else {
+            $parentAlias = dirname($parentRoute->getMenuItem()->getPath());
+            $filepath = $this->app['alias']->get("{$parentAlias}/{$filename}.md");
+        }
+
         if(is_file($filepath)) {
             $this->sendErrorHeader("Eine Seite mit demselben Namen existiert schon.");
         }
         $eol = PHP_EOL;
-        $data = "---{$eol}title: {$title}{$eol}hidden: 1{$eol}---{$eol}Meine neue Seite{$eol}";
+        $data = "---{$eol}title: {$title}{$eol}disabled: 1{$eol}hidden: 1{$eol}---{$eol}Meine neue Seite{$eol}";
         if(!file_put_contents($filepath, $data)) {
             $this->sendErrorHeader("Seite konnte nicht erstellt werden.");
+        }
+
+        if(!empty($parent)) {
+            $query->set('route', $parent);
         }
         return $this->indexAction($query, $request);
     }

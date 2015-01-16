@@ -23,7 +23,7 @@ class PostController extends Controller
             $this->sendErrorHeader("Ein Blogpost mit demselben Namen existiert schon.");
         }
         $eol = PHP_EOL;
-        $data = "---{$eol}title: {$title}{$eol}hidden: 1{$eol}---{$eol}Mein neuer Blogpost{$eol}";
+        $data = "---{$eol}title: {$title}{$eol}disabled: 1{$eol}hidden: 1{$eol}---{$eol}Mein neuer Blogpost{$eol}";
         if(!file_put_contents($filepath, $data)) {
             $this->sendErrorHeader("Blogpost konnte nicht erstellt werden.");
         }

@@ -11,7 +11,9 @@
             <th class="icon" width="1%"></th>
             <th class="title">Titel</th>
             <th>Datum</th>
-            <th></th>
+            <!-- th width="1%">M</th>
+            <th width="1%">A</th -->
+            <th width="1%"></th>
         </tr>
         </thead>
         <tbody>
@@ -20,6 +22,8 @@
                 <td class="icon"><i class="fa fa-file-o fa-lg"></i></td>
                 <td class="title">{% if item.title is empty %}[Kein Titel] {% else %}{{ item.title }}{% endif %}</td>
                 <td>{{ item.date }}</td>
+                <!-- td><i class="fa fa-square-o fa-lg"></i></td>
+                <td><i class="fa fa-square-o fa-lg"></i></td -->
                 <td class="links">
                     <a class="pure-button button-small" href="?action=post/data&path={{ item.path }}">Eigenschaften</a>
                     <a class="pure-button button-small" href="?action=post/content&path={{ item.path }}">Inhalte</a>

@@ -33,13 +33,13 @@
 {% endmacro %}
 
 
-{% macro addblock(label) %}
+{% macro addblock(label, parent = "") %}
     <div style="float:left;margin-right:0.5em">
         <a class="add-folder pure-button" data-file="{{ item }}" href="#">{{ label }}</a>
     </div>
     <div class="addblock-folder hidden">
         <form class="pure-form">
-            <input type="text" name="name" class="name pure-input-1-4">
+            <input type="text" data-parent="{{ parent }}" name="name" class="name pure-input-1-4">
             <button class="save pure-button">Erstellen</button>
             <button class="cancel pure-button">Abbrechen</button>
             <span class="error"></span>
@@ -59,10 +59,11 @@
         });
         $(document).on("click", "div.addblock-folder button.save", function () {
             var name = $('div.addblock-folder input').val();
+            var parent = $('div.addblock-folder input').attr('data-parent');
             $.ajax({
                 type: "POST",
                 url: "{{ action }}",
-                data: { dir: "{{ dir }}", name: name }
+                data: { parent: parent, name: name }
             }).success(function (html) {
                 var table = $(html).find('.pure-table');
                 $(".pure-table").replaceWith(table);

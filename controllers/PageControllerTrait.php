@@ -23,8 +23,14 @@ trait PageControllerTrait
         $alias = $query->get('path');
         $path = $this->app['alias']->get($alias);
 
+        #$data = $this->app['pageLoader']->load($alias);
+
         $loader = new FrontMatterLoader();
         $data = $loader->load($path);
+
+        // Readonly
+        $data['alias'] = $alias;
+        $data['path'] = $path;
 
         $fields = $this->app['config']->get('plugins.config.adminpanel.fields', []);
         $unconfig = [];
@@ -48,13 +54,24 @@ trait PageControllerTrait
             }
         }
 
+        $groups = ['Allgemein', 'Media', 'Tags', 'Layout', 'Info'];
+        $fieldsets = [];
+        foreach($fields as $key => $field) {
+            $group = isset($field['group']) ? $field['group'] : '';
+            $fieldset = in_array($group, $groups) ? $group : '';
+            $fieldsets[$fieldset][$key] = $field;
+        }
+        $fieldsets = ArrayHelper::sortArrayByArray($fieldsets, $groups);
+
         return $this->render('data.twig', [
             'data' => $data,
             'fields' => $fields,
             'saved' => $saved,
             'controller' => $this->controller,
             'action' => $this->action,
-            'cancel' => $query->get('cancel')
+            'cancel' => $query->get('cancel'),
+            'alias' => $alias,
+            'fieldsets' => $fieldsets
         ]);
     }
 

@@ -13,9 +13,16 @@
 
     <form action="" method="post" class="pure-form">
 
-        {% for name, field in fields %}
-            {% set value = attribute(data, name) %}
-            {{ macro.element(name, field, value) }}
+        {% for legend, fieldset in fieldsets %}
+            <fieldset>
+                {% if legend %}
+                    <p><strong>{{ legend }}</strong></p>
+                {% endif %}
+                {% for name, field in fieldset %}
+                    {% set value = attribute(data, name) %}
+                    {{ macro.element(name, field, value) }}
+                {% endfor %}
+            </fieldset>
         {% endfor %}
 
         <button class="pure-button pure-button-primary" name="button1" type="submit">Sichern</button>
