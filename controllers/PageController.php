@@ -25,7 +25,7 @@ class PageController extends Controller
     {
         $title = $request->get('name');
         $parent = $request->get('parent');
-        if(empty($title)) {
+        if (empty($title)) {
             $this->sendErrorHeader("Bitte einen Namen eingeben.");
         }
 
@@ -34,23 +34,23 @@ class PageController extends Controller
 
         $parentRoute = $this->getPageTree()->findByRoute($parent);
 
-        if($parentRoute->isRoot()) {
+        if ($parentRoute->isRoot()) {
             $filepath = $this->app['alias']->get("@page/{$filename}.md");
         } else {
             $parentAlias = dirname($parentRoute->getMenuItem()->getPath());
             $filepath = $this->app['alias']->get("{$parentAlias}/{$filename}.md");
         }
 
-        if(is_file($filepath)) {
+        if (is_file($filepath)) {
             $this->sendErrorHeader("Eine Seite mit demselben Namen existiert schon.");
         }
         $eol = PHP_EOL;
         $data = "---{$eol}title: {$title}{$eol}disabled: 1{$eol}hidden: 1{$eol}---{$eol}Meine neue Seite{$eol}";
-        if(!file_put_contents($filepath, $data)) {
+        if (!file_put_contents($filepath, $data)) {
             $this->sendErrorHeader("Seite konnte nicht erstellt werden.");
         }
 
-        if(!empty($parent)) {
+        if (!empty($parent)) {
             $query->set('route', $parent);
         }
         return $this->indexAction($query, $request);
@@ -61,18 +61,18 @@ class PageController extends Controller
         $file = $request->get('file');
         $filepath = $this->app['alias']->get($file);
         $basename = basename($filepath);
-        if(empty($file)) {
+        if (empty($file)) {
             $this->sendErrorHeader('Ungültige Parameter!');
         }
-        if(!is_file($filepath)) {
+        if (!is_file($filepath)) {
             $this->sendErrorHeader("Seite {$basename} konnte nicht gefunden werden.");
         }
         $tree = $this->getPageTree()->findBy('path', $file);
         $hasChildren = ($tree && $tree->hasChildren()) ? true : false;
-        if($hasChildren) {
+        if ($hasChildren) {
             $this->sendErrorHeader("Seite {$basename} hat Unterseiten und konnte nicht gelöscht werden.");
         }
-        if(!@unlink($filepath)) {
+        if (!@unlink($filepath)) {
             $this->sendErrorHeader("Seite {$basename} konnte nicht gelöscht werden.");
         }
         header('Content-Type: application/json');
@@ -90,10 +90,10 @@ class PageController extends Controller
     protected function redirectBack($path)
     {
         $item = $this->app['menu']->find($path, 'path');
-        if(is_null($item)) {
+        if (is_null($item)) {
             $item = $this->app['posts']->find($path, 'path');
         }
-        if(isset($item)) {
+        if (isset($item)) {
             $route = $item->route;
         } else {
             $route = '';
@@ -138,5 +138,4 @@ class PageController extends Controller
             'saved' => $saved
         ]);
     }*/
-
 }

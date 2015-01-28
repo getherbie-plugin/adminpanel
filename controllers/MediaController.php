@@ -12,13 +12,13 @@ class MediaController extends Controller
         $dir = strtolower(trim($request->get('dir')));
         $name = strtolower(trim($request->get('name')));
         $path = $this->app['alias']->get('@media/' . $dir . '/' . $name);
-        if(empty($name)) {
+        if (empty($name)) {
             $this->sendErrorHeader('Bitte einen Namen eingeben.');
         }
-        if(is_dir($path)) {
+        if (is_dir($path)) {
             $this->sendErrorHeader('Ein gleichnamiger Ordner ist schon vorhanden.');
         }
-        if(!@mkdir($path)) {
+        if (!@mkdir($path)) {
             $this->sendErrorHeader('Ordner konnte nicht erstellt werden.');
         }
         $query->add(['dir' => $dir]);
@@ -33,7 +33,7 @@ class MediaController extends Controller
         $root = $this->app['alias']->get('@media');
 
         $iterator = null;
-        if(is_dir($path)) {
+        if (is_dir($path)) {
             $directoryIterator = new Herbie\Iterator\DirectoryIterator($path, $root);
             $iterator = new Herbie\Iterator\DirectoryDotFilter($directoryIterator);
         }
@@ -52,10 +52,10 @@ class MediaController extends Controller
         $absPath = $this->app['alias']->get('@media/' . $path);
         $name = basename($absPath);
 
-        if(is_file($absPath) && !@unlink($absPath)) {
+        if (is_file($absPath) && !@unlink($absPath)) {
             $this->sendErrorHeader("Datei {$name} konnte nicht gelöscht werden.");
-        } elseif(is_dir($absPath) && !@rmdir($absPath)) {
-            if(count(scandir($absPath)) >= 2) {
+        } elseif (is_dir($absPath) && !@rmdir($absPath)) {
+            if (count(scandir($absPath)) >= 2) {
                 $this->sendErrorHeader("Ordner {$name} enthält Dateien und konnte nicht gelöscht werden.");
             }
             $this->sendErrorHeader("Ordner {$name} konnte nicht gelöscht werden.");
@@ -70,13 +70,12 @@ class MediaController extends Controller
         $data = array();
         $dir = strtolower(trim($request->get('dir')));
 
-        if(!empty($_FILES)) {
+        if (!empty($_FILES)) {
             $files = array();
 
             $uploaddir = $this->app['alias']->get("@media/{$dir}/");
-            foreach($_FILES as $file)
-            {
-                if(move_uploaded_file($file['tmp_name'], $uploaddir . basename($file['name']))) {
+            foreach ($_FILES as $file) {
+                if (move_uploaded_file($file['tmp_name'], $uploaddir . basename($file['name']))) {
                     $files[] = $uploaddir . $file['name'];
                 } else {
                     $this->sendErrorHeader('Beim Upload ist ein Fehler aufgetreten.');
@@ -94,5 +93,4 @@ class MediaController extends Controller
         echo json_encode($data);
         exit;
     }
-
 }

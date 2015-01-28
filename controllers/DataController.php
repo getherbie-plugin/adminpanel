@@ -12,19 +12,19 @@ class DataController extends Controller
         $name = strtolower(trim($request->get('name')));
         $path = $this->app['alias']->get("@site/data/{$name}.yml");
         $dir = dirname($path);
-        if(empty($name)) {
+        if (empty($name)) {
             $this->sendErrorHeader('Bitte einen Namen eingeben.');
         }
-        if(is_file($path)) {
+        if (is_file($path)) {
             $this->sendErrorHeader('Eine gleichnamige Datei ist schon vorhanden.');
         }
-        if(!is_dir($dir)) {
+        if (!is_dir($dir)) {
             $this->sendErrorHeader("Verzeichnis {$dir} existiert nicht.");
         }
-        if(!is_writable($dir)) {
+        if (!is_writable($dir)) {
             $this->sendErrorHeader("Verzeichnis {$dir} ist nicht schreibbar.");
         }
-        if(!fclose(fopen($path, "x"))) {
+        if (!fclose(fopen($path, "x"))) {
             $this->sendErrorHeader("Datei {$name} konnte nicht erstellt werden.");
         }
         return $this->indexAction($query, $request);
@@ -33,7 +33,7 @@ class DataController extends Controller
     public function indexAction()
     {
         $data = $this->app['data'];
-        foreach($data as $key => $unused) {
+        foreach ($data as $key => $unused) {
             $path = $this->app['alias']->get('@site/data/' . $key . '.yml');
             $data[$key] = [
                 'name' => $key,
@@ -52,10 +52,10 @@ class DataController extends Controller
         $file = $request->get('file');
         $absPath = $this->app['alias']->get('@site/data/' . $file . '.yml');
 
-        if(!is_file($absPath)) {
+        if (!is_file($absPath)) {
             $this->sendErrorHeader("Datei {$absPath} ist nicht vorhanden.");
         }
-        if(!@unlink($absPath)) {
+        if (!@unlink($absPath)) {
             $this->sendErrorHeader("Datei {$file} konnte nicht gelöscht werden.");
         }
 
@@ -72,12 +72,12 @@ class DataController extends Controller
         // Config
         $name = pathinfo($absPath, PATHINFO_FILENAME);
         $config = $this->app['config']->get('plugins.config.adminpanel.data.' . $name . '.config');
-        if(is_null($config)) {
+        if (is_null($config)) {
             return $this->editAsString($query, $request);
         }
 
         $saved = false;
-        if($this->app['request']->getMethod() == 'POST') {
+        if ($this->app['request']->getMethod() == 'POST') {
             $data = $request->get('data', []);
             #echo"<pre>";print_r($data);echo"</pre>";
             $content = Yaml::dump(array_values($data), 100, 4);
@@ -99,7 +99,7 @@ class DataController extends Controller
         $absPath = $this->app['alias']->get($path);
 
         $saved = false;
-        if($this->app['request']->getMethod() == 'POST') {
+        if ($this->app['request']->getMethod() == 'POST') {
             $content = $request->get('content', null);
             $saved = file_put_contents($absPath, $content);
         }
@@ -109,5 +109,4 @@ class DataController extends Controller
             'saved' => $saved
         ]);
     }
-
 }

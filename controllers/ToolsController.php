@@ -21,7 +21,7 @@ class ToolsController extends Controller
     {
         $name = $request->get('name');
         $dirs = $this->getCacheDirs();
-        if(empty($name) || !array_key_exists($name, $dirs)) {
+        if (empty($name) || !array_key_exists($name, $dirs)) {
             $this->sendErrorHeader('Ungültiger Aufruf.');
         }
         /**
@@ -30,11 +30,11 @@ class ToolsController extends Controller
          * @param $count
          */
         extract($dirs[$name]);
-        if(!is_dir($path)) {
+        if (!is_dir($path)) {
             $this->sendErrorHeader("{$label} existiert nicht.");
         }
 
-        if(!FilesystemHelper::rrmdir($path)) {
+        if (!FilesystemHelper::rrmdir($path)) {
             $this->sendErrorHeader("{$label} wurde nicht oder nur teilweise gelöscht.");
         }
 
@@ -46,18 +46,18 @@ class ToolsController extends Controller
     {
         $name = $request->get('name');
         $files = $this->getYamlFiles();
-        if(empty($name) || !array_key_exists($name, $files)) {
+        if (empty($name) || !array_key_exists($name, $files)) {
             $this->sendErrorHeader('Ungültiger Aufruf.');
         }
-        if(!is_file($files[$name]['path'])) {
+        if (!is_file($files[$name]['path'])) {
             $this->sendErrorHeader("{$files[$name]['label']} existiert nicht.");
         }
-        if(!FilesystemHelper::createBackupFile($files[$name]['path'])) {
+        if (!FilesystemHelper::createBackupFile($files[$name]['path'])) {
             $this->sendErrorHeader("Backup-Datei konnte nicht erstellt werden.");
         }
         $parsed = Yaml::parse($files[$name]['path']);
         $content = Yaml::dump($parsed, 100, 4);
-        if(!file_put_contents($files[$name]['path'], $content)) {
+        if (!file_put_contents($files[$name]['path'], $content)) {
             $this->sendErrorHeader("Datei konnte nicht erstellt werden.");
         }
         echo "Datei wurde neu formatiert.";
@@ -75,9 +75,9 @@ class ToolsController extends Controller
             ['web/cache', 'Web-Cache', $this->app['alias']->get('@web/cache')]
         ];
         $dirs = [];
-        foreach($tempDirs as $td) {
+        foreach ($tempDirs as $td) {
             list($key, $label, $path) = $td;
-            if(!empty($path) && is_dir($path)) {
+            if (!empty($path) && is_dir($path)) {
                 $dirs[$key] = [
                     'label' => $label,
                     'path' => $path,
@@ -92,7 +92,7 @@ class ToolsController extends Controller
     {
         $dirs = [];
         $file = $this->app['alias']->get('@site/config.yml');
-        if(is_file($file)) {
+        if (is_file($file)) {
             $dirs['config'] = [
                 'label' => 'Site-Config',
                 'path' => $file
@@ -100,5 +100,4 @@ class ToolsController extends Controller
         }
         return $dirs;
     }
-
 }

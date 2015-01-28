@@ -35,8 +35,8 @@ trait PageControllerTrait
         $fields = $this->app['config']->get('plugins.config.adminpanel.fields', []);
         $unconfig = [];
 
-        foreach($data as $key => $value) {
-            if(empty($fields[$key]['type'])) {
+        foreach ($data as $key => $value) {
+            if (empty($fields[$key]['type'])) {
                 $fields[$key] = [
                     'label' => ucfirst($key)
                 ];
@@ -45,10 +45,10 @@ trait PageControllerTrait
         }
 
         $saved = false;
-        if(!empty($_POST)) {
+        if (!empty($_POST)) {
             $update = array_merge($request->get('data', []), $unconfig);
             $update = ArrayHelper::filterEmptyElements($update);
-            if(PageHelper::updateData($path, $update)) {
+            if (PageHelper::updateData($path, $update)) {
                 $data = $loader->load($path);
                 $saved = true;
             }
@@ -56,7 +56,7 @@ trait PageControllerTrait
 
         $groups = ['Allgemein', 'Media', 'Tags', 'Layout', 'Info'];
         $fieldsets = [];
-        foreach($fields as $key => $field) {
+        foreach ($fields as $key => $field) {
             $group = isset($field['group']) ? $field['group'] : '';
             $fieldset = in_array($group, $groups) ? $group : '';
             $fieldsets[$fieldset][$key] = $field;
@@ -81,9 +81,9 @@ trait PageControllerTrait
         $path = $this->app['alias']->get($alias);
 
         $saved = false;
-        if(!empty($_POST)) {
+        if (!empty($_POST)) {
             $segments = $request->get('segments', []);
-            if(PageHelper::updateSegments($path, $segments)) {
+            if (PageHelper::updateSegments($path, $segments)) {
                 $saved = true;
             }
         }
@@ -96,9 +96,9 @@ trait PageControllerTrait
         $layout = empty($data['layout']) ? 'default.html' : $data['layout'];
 
         $segments = [];
-        foreach($layouts[$layout] as $pairs) {
-            foreach($pairs as $key => $label) {
-                if(empty($key)) {
+        foreach ($layouts[$layout] as $pairs) {
+            foreach ($pairs as $key => $label) {
+                if (empty($key)) {
                     $key = 0;
                 }
                 $segments[$key] = [
@@ -117,5 +117,4 @@ trait PageControllerTrait
             'cancel' => $query->get('cancel')
         ]);
     }
-
 }

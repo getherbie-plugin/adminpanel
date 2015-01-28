@@ -29,7 +29,8 @@ class AdminpanelPlugin extends Herbie\Plugin
 
     protected $request;
 
-    public function init() {
+    public function init()
+    {
         $this->session = new Session();
         $this->session->start();
         $this->request = $this->app['request'];
@@ -61,7 +62,7 @@ class AdminpanelPlugin extends Herbie\Plugin
 
     public function onOutputGenerated(Herbie\Event $event)
     {
-        if(!$this->isAdmin()) {
+        if (!$this->isAdmin()) {
             if ($this->isAuthenticated() && !empty($this->panel)) {
                 $content = $event['response']->getContent();
                 // replace body tag
@@ -71,10 +72,9 @@ class AdminpanelPlugin extends Herbie\Plugin
                 $event['response']->setContent($content);
             }
         } else {
-
             $action = $this->session->get('LOGGED_IN') ? $this->request->query->get('action', 'page/index') : 'login';
             $pos = strpos($action, '/');
-            if($pos === false) {
+            if ($pos === false) {
                 $controller = 'default';
             } else {
                 $controller = substr($action, 0, $pos);
@@ -85,7 +85,7 @@ class AdminpanelPlugin extends Herbie\Plugin
             $method = $action . 'Action';
 
             $controllerObject = new $controllerClass($this->app, $this->session);
-            if(!method_exists($controllerObject, $method)) {
+            if (!method_exists($controllerObject, $method)) {
                 $controllerObject = new controllers\DefaultController($this->app, $this->session);
                 $method = 'errorAction';
             }
@@ -100,7 +100,7 @@ class AdminpanelPlugin extends Herbie\Plugin
 
     public function onPageLoaded(Herbie\Event $event)
     {
-        if(empty($this->app['page']->adminpanel)) {
+        if (empty($this->app['page']->adminpanel)) {
             $controller = (0 === strpos($this->app['page']->path, '@post')) ? 'post' : 'page';
             $this->panel = $this->app['twig']->render('@plugin/adminpanel/views/panel.twig', [
                 'controller' => $controller
@@ -128,5 +128,4 @@ class AdminpanelPlugin extends Herbie\Plugin
     {
         return (bool)$this->session->get('LOGGED_IN', false);
     }
-
 }

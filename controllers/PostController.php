@@ -14,17 +14,17 @@ class PostController extends Controller
     public function addAction($query, $request)
     {
         $title = $request->get('name');
-        if(empty($title)) {
+        if (empty($title)) {
             $this->sendErrorHeader("Bitte einen Namen eingeben.");
         }
         $filename = date('Y-m-d-') . FilesystemHelper::sanitizeFilename($title);
         $filepath = $this->app['alias']->get("@post/{$filename}.md");
-        if(is_file($filepath)) {
+        if (is_file($filepath)) {
             $this->sendErrorHeader("Ein Blogpost mit demselben Namen existiert schon.");
         }
         $eol = PHP_EOL;
         $data = "---{$eol}title: {$title}{$eol}disabled: 1{$eol}hidden: 1{$eol}---{$eol}Mein neuer Blogpost{$eol}";
-        if(!file_put_contents($filepath, $data)) {
+        if (!file_put_contents($filepath, $data)) {
             $this->sendErrorHeader("Blogpost konnte nicht erstellt werden.");
         }
         return $this->indexAction();
@@ -43,13 +43,13 @@ class PostController extends Controller
         $file = $request->get('file');
         $filepath = $this->app['alias']->get($file);
         $basename = basename($filepath);
-        if(empty($file)) {
+        if (empty($file)) {
             $this->sendErrorHeader('Ungültige Parameter!');
         }
-        if(!is_file($filepath)) {
+        if (!is_file($filepath)) {
             $this->sendErrorHeader("Blogpost {$basename} konnte nicht gefunden werden.");
         }
-        if(!@unlink($filepath)) {
+        if (!@unlink($filepath)) {
             $this->sendErrorHeader("Blogpost {$basename} konnte nicht gelöscht werden.");
         }
         header('Content-Type: application/json');
@@ -67,8 +67,8 @@ class PostController extends Controller
         // Data config
         $data = $this->app['config']->get('plugins.config.adminpanel.fields', []);
 
-        foreach($page['data'] as $key => $value) {
-            if(!isset($data[$key])) {
+        foreach ($page['data'] as $key => $value) {
+            if (!isset($data[$key])) {
                 $data[$key] = [
                     'type' => 'label',
                     'label' => $key,
@@ -84,9 +84,9 @@ class PostController extends Controller
         $layouts = $this->app['config']->get('plugins.config.adminpanel.layouts', []);
         $layout = empty($data['layout']['value']) ? 'default.html' : $data['layout']['value'];
         $segments = [];
-        foreach($layouts[$layout] as $pairs) {
-            foreach($pairs as $key => $label) {
-                if(empty($key)) {
+        foreach ($layouts[$layout] as $pairs) {
+            foreach ($pairs as $key => $label) {
+                if (empty($key)) {
                     $key = 0;
                 }
                 $segments[$key] = [
@@ -96,7 +96,7 @@ class PostController extends Controller
             }
         }
 
-        if(!empty($_POST)) {
+        if (!empty($_POST)) {
             $postdata = array_merge($request->get('data', []), $unconfig);
             $postsegments = $request->get('segments', []);
             $this->app['pageLoader']->save($path, $postdata, $postsegments);
@@ -108,5 +108,4 @@ class PostController extends Controller
             'unconfig' => $unconfig
         ]);
     }
-
 }
