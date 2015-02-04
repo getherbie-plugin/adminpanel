@@ -33,7 +33,7 @@ fields:
     keep_extension:
         label: Dateiendung behalten
         type: checkbox
-    ctype:
+    content_type:
         label: Content-Type
         type: text
     categories:
