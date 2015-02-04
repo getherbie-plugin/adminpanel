@@ -27,13 +27,13 @@ fields:
     hidden:
         label: In Menüs ausblenden
         type: checkbox
-    noCache:
+    nocache:
         label: Nicht cachen
         type: checkbox
-    preserveExtension:
+    keep_extension:
         label: Dateiendung behalten
         type: checkbox
-    contentType:
+    ctype:
         label: Content-Type
         type: text
     categories:
