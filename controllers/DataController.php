@@ -32,9 +32,10 @@ class DataController extends Controller
 
     public function indexAction()
     {
+        $dir = $this->app['alias']->get('@site/data/');
         $data = $this->app['data'];
         foreach ($data as $key => $unused) {
-            $path = $this->app['alias']->get('@site/data/' . $key . '.yml');
+            $path = $dir . $key . '.yml';
             $data[$key] = [
                 'name' => $key,
                 'size' => is_readable($path) ? filesize($path) : 0,
@@ -43,7 +44,8 @@ class DataController extends Controller
             ];
         };
         return $this->render('data/index.twig', [
-            'data' => $data
+            'data' => $data,
+            'dir' => $dir
         ]);
     }
 

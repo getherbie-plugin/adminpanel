@@ -17,6 +17,7 @@ class PageController extends Controller
             'tree' => $tree,
             'cancel' => $route,
             'breadcrumb' => $route,
+            'dir' => $this->app['config']->get('pages.path'),
             'parent' => $route // for macro.grid.addblock_js()
         ]);
     }

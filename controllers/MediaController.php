@@ -33,7 +33,7 @@ class MediaController extends Controller
         $root = $this->app['alias']->get('@media');
 
         $iterator = null;
-        if (is_dir($path)) {
+        if (is_readable($path)) {
             $directoryIterator = new Herbie\Iterator\DirectoryIterator($path, $root);
             $iterator = new Herbie\Iterator\DirectoryDotFilter($directoryIterator);
         }
@@ -42,6 +42,7 @@ class MediaController extends Controller
             'iterator' => $iterator,
             'dir' => $dir,
             'parentDir' => str_replace('.', '', dirname($dir)),
+            'root' => $root
         ]);
     }
 

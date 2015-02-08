@@ -34,7 +34,8 @@ class PostController extends Controller
     {
         $builder = new Menu\Post\Builder($this->app);
         return $this->render('post/index.twig', [
-            'posts' => $builder->build()
+            'posts' => $builder->build(),
+            'dir' => $this->app['config']->get('posts.path')
         ]);
     }
 

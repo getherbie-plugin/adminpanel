@@ -4,6 +4,7 @@
 {% block title %}Daten{% endblock %}
 
 {% block content %}
+    {% if dir is readable %}
     <table class="pure-table pure-table-horizontal data-table">
         <thead>
         <tr>
@@ -30,6 +31,9 @@
         </tbody>
     </table>
     {{ grid.addblock("Daten hinzufügen") }}
+    {% else %}
+        <p>Das Verzeichnis <b>{{ dir }}</b> existiert nicht oder ist nicht lesbar.</p>
+    {% endif %}
 {% endblock %}
 
 {% block jquery %}

@@ -4,7 +4,7 @@
 {% block title %}Blogposts{% endblock %}
 
 {% block content %}
-
+    {% if dir is readable %}
     <table class="pure-table pure-table-horizontal">
         <thead>
         <tr>
@@ -33,9 +33,10 @@
         {% endfor %}
         </tbody>
     </table>
-
     {{ grid.addblock("Blogpost hinzufügen") }}
-
+    {% else %}
+        <p>Das Verzeichnis <b>{{ dir }}</b> existiert nicht oder ist nicht lesbar.</p>
+    {% endif %}
 {% endblock %}
 
 {% block jquery %}

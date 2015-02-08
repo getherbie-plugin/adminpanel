@@ -5,6 +5,7 @@
 {% block subtitle %}Pfad: /{{ breadcrumb }}{% endblock %}
 
 {% block content %}
+    {% if dir is readable %}
     <table class="pure-table pure-table-horizontal">
         <thead>
         <tr>
@@ -51,9 +52,10 @@
         {% endfor %}
         </tbody>
     </table>
-
     {{ grid.addblock("Seite hinzufügen", parent) }}
-
+    {% else %}
+        <p>Das Verzeichnis <b>{{ dir }}</b> existiert nicht oder ist nicht lesbar.</p>
+    {% endif %}
 {% endblock %}
 
 {% block jquery %}
