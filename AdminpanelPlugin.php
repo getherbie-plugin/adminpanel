@@ -62,6 +62,11 @@ class AdminpanelPlugin extends Herbie\Plugin
 
     public function onOutputGenerated(Herbie\Event $event)
     {
+        // return if response is not successful
+        if (!$event['response']->isSuccessful()) {
+            return;
+        }
+
         if (!$this->isAdmin()) {
             if ($this->isAuthenticated() && !empty($this->panel)) {
                 $content = $event['response']->getContent();
