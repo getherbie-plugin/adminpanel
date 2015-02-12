@@ -13,19 +13,19 @@ class DataController extends Controller
         $path = $this->app['alias']->get("@site/data/{$name}.yml");
         $dir = dirname($path);
         if (empty($name)) {
-            $this->sendErrorHeader('Bitte einen Namen eingeben.');
+            $this->sendErrorHeader($this->t('Name cannot be empty.'));
         }
         if (is_file($path)) {
-            $this->sendErrorHeader('Eine gleichnamige Datei ist schon vorhanden.');
+            $this->sendErrorHeader($this->t('A file with the same name already exists.'));
         }
         if (!is_dir($dir)) {
-            $this->sendErrorHeader("Verzeichnis {$dir} existiert nicht.");
+            $this->sendErrorHeader($this->t('Directory {dir} does not exist.', ['{dir}' => $dir]));
         }
         if (!is_writable($dir)) {
-            $this->sendErrorHeader("Verzeichnis {$dir} ist nicht schreibbar.");
+            $this->sendErrorHeader($this->t('Directory {dir} is not writable.', ['{dir}' => $dir]));
         }
         if (!fclose(fopen($path, "x"))) {
-            $this->sendErrorHeader("Datei {$name} konnte nicht erstellt werden.");
+            $this->sendErrorHeader($this->t('File {name} can not be created.', ['{name}' => $name]));
         }
         return $this->indexAction($query, $request);
     }
@@ -55,10 +55,10 @@ class DataController extends Controller
         $absPath = $this->app['alias']->get('@site/data/' . $file . '.yml');
 
         if (!is_file($absPath)) {
-            $this->sendErrorHeader("Datei {$absPath} ist nicht vorhanden.");
+            $this->sendErrorHeader($this->t('File {file} does not exist.', ['{file}' => $file]));
         }
         if (!@unlink($absPath)) {
-            $this->sendErrorHeader("Datei {$file} konnte nicht gelöscht werden.");
+            $this->sendErrorHeader($this->t('File {file} can not be deleted.', ['{file}' => $file]));
         }
 
         header('Content-Type: application/json');
@@ -81,12 +81,9 @@ class DataController extends Controller
         $saved = false;
         if ($this->app['request']->getMethod() == 'POST') {
             $data = $request->get('data', []);
-            #echo"<pre>";print_r($data);echo"</pre>";
             $content = Yaml::dump(array_values($data), 100, 4);
             $saved = file_put_contents($absPath, $content);
         }
-
-        #echo"<pre>";print_r(Yaml::parse(file_get_contents($absPath)));echo"</pre>";
 
         return $this->render('data/edit.twig', [
             'config' => $config,

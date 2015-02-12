@@ -1,24 +1,24 @@
 {% extends "@plugin/adminpanel/layouts/main.twig" %}
 {% import "@plugin/adminpanel/views/data/macros.twig" as macro %}
 
-{% block title %}Daten editieren{% endblock %}
+{% block title %}{{ translate('adminpanel', 'Edit data') }}{% endblock %}
 {% block subtitle %}{{ path }}{% endblock %}
 
 {% block alert %}
-    {% if saved %}<div class="alert alert-success">Die Daten wurden gesichert.</div>{% endif %}
+    {% if saved %}<div class="alert alert-success">{{ translate('adminpanel', 'Data saved successfully.') }}</div>{% endif %}
 {% endblock %}
 
 {% block content %}
 
     <form action="" method="post" class="pure-form pure-form-aligned">
         <div>
-            <a class="add first" href="#"><i class="fa fa-plus-circle"></i> Hinzufügen</a>
+            <a class="add first" href="#"><i class="fa fa-plus-circle"></i> {{ translate('adminpanel', 'Add') }}</a>
             {% for index,item in data %}
                 {{ macro.element(config, index, item) }}
             {% endfor %}
         </div>
-        <button class="pure-button pure-button-primary" name="button1" type="submit">Sichern</button>
-        <a href="?action=data/index" class="pure-button">Abbrechen</a>
+        <button class="pure-button pure-button-primary" name="button1" type="submit">{{ translate('adminpanel', 'Save') }}</button>
+        <a href="?action=data/index" class="pure-button">{{ translate('adminpanel', 'Cancel') }}</a>
     </form>
 
     <!-- template used for DOM manipulations -->

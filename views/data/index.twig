@@ -1,7 +1,7 @@
 {% extends "@plugin/adminpanel/layouts/main.twig" %}
 {% import "@plugin/adminpanel/views/macro.grid.twig" as grid %}
 
-{% block title %}Daten{% endblock %}
+{% block title %}{{ translate('adminpanel', 'Data') }}{% endblock %}
 
 {% block content %}
     {% if dir is readable %}
@@ -9,9 +9,9 @@
         <thead>
         <tr>
             <th class="icon" width="1%"></th>
-            <th class="title">Name</th>
-            <th>Grösse</th>
-            <th>Geändert</th>
+            <th class="title">{{ translate('adminpanel', 'Name') }}</th>
+            <th>{{ translate('adminpanel', 'Size') }}</th>
+            <th>{{ translate('adminpanel', 'Modified') }}</th>
             <th></th>
         </tr>
         </thead>
@@ -23,16 +23,16 @@
                 <td>{{ entry.size|filesize }}</td>
                 <td>{{ entry.modified|strftime }}</td>
                 <td class="links">
-                    <a class="pure-button button-small" href="?action=data/edit&path=@site/data/{{ item }}.yml">Editieren</a>
-                    {{ grid.delete_link(item, "Löschen") }}
+                    <a class="pure-button button-small" href="?action=data/edit&path=@site/data/{{ item }}.yml">{{ translate('adminpanel', 'Edit') }}</a>
+                    {{ grid.delete_link(item, translate('adminpanel', 'Delete')) }}
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    {{ grid.addblock("Daten hinzufügen") }}
+    {{ grid.addblock(translate('adminpanel', 'Add data')) }}
     {% else %}
-        <p>Das Verzeichnis <b>{{ dir }}</b> existiert nicht oder ist nicht lesbar.</p>
+        <p>{{ translate('adminpanel', 'Directory {dir} does not exist or is not readable.', {'{dir}': dir}) }}</p>
     {% endif %}
 {% endblock %}
 

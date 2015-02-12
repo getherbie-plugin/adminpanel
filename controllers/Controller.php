@@ -34,4 +34,9 @@ class Controller
             exit;
         }
     }
+
+    protected function t($message, array $params = [])
+    {
+        return $this->app['translator']->translate('adminpanel', $message, $params);
+    }
 }

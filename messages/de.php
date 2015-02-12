@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'A file with the same name already exists.' => 'Eine gleichnamige Datei ist schon vorhanden.',
+    'Add data' => 'Daten hinzufügen',
+    'Add' => 'Hinzufügen',
+    'Cancel' => 'Abbrechen',
+    'Create' => 'Erstellen',
+    'Data saved successfully.' => 'Die Daten wurden gesichert.',
+    'Data' => 'Daten',
+    'Delete' => 'Löschen',
+    'Directory {dir} does not exist or is not readable.' => 'Das Verzeichnis {dir} existiert nicht oder ist nicht lesbar.',
+    'Directory {dir} does not exist.' => 'Verzeichnis {dir} existiert nicht.',
+    'Directory {dir} is not writable.' => 'Verzeichnis {dir} ist nicht schreibbar.',
+    'Edit data' => 'Daten editieren',
+    'Edit' => 'Editieren',
+    'File {file} can not be deleted.' => 'Datei {file} konnte nicht gelöscht werden.',
+    'File {filepath} does not exist.' => 'Datei {filepath} ist nicht vorhanden.',
+    'File {name} can not be created.' => 'Datei {name} konnte nicht erstellt werden.',
+    'Form config is missing.' => 'Formular-Konfiguration fehlt.',
+    'Modified' => 'Geändert',
+    'Name cannot be empty.' => 'Name darf nicht leer sein.',
+    'Name' => 'Name',
+    'Save' => 'Sichern',
+    'Size' => 'Grösse',
+];
