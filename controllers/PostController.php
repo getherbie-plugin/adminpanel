@@ -32,7 +32,7 @@ class PostController extends Controller
 
     public function indexAction()
     {
-        $builder = new Menu\Post\Builder($this->app);
+        $builder = new Menu\Post\Builder($this->app['dataCache'], $this->app['config']);
         return $this->render('post/index.twig', [
             'posts' => $builder->build(),
             'dir' => $this->app['config']->get('posts.path')

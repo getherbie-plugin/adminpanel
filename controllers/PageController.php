@@ -83,7 +83,7 @@ class PageController extends Controller
 
     protected function getPageTree()
     {
-        $builder = new Page\Builder($this->app);
+        $builder = new Page\Builder($this->app['dataCache'], $this->app['config']);
         $menu = $builder->buildCollection();
         return Page\Node::buildTree($menu);
     }
