@@ -2,6 +2,7 @@
 
 return [
     'A file with the same name already exists.' => 'Eine gleichnamige Datei ist schon vorhanden.',
+    'A folder with the same name already exists.' => 'Ein gleichnamiger Ordner ist schon vorhanden.',
     'Add data' => 'Daten hinzufügen',
     'Add' => 'Hinzufügen',
     'Cancel' => 'Abbrechen',
@@ -17,10 +18,16 @@ return [
     'File {file} can not be deleted.' => 'Datei {file} konnte nicht gelöscht werden.',
     'File {filepath} does not exist.' => 'Datei {filepath} ist nicht vorhanden.',
     'File {name} can not be created.' => 'Datei {name} konnte nicht erstellt werden.',
+    'Folder {name} can not be created.' => 'Ordner {name} konnte nicht erstellt werden.',
+    'Folder {name} can not be deleted.' => 'Ordner {name} konnte nicht erstellt werden.',
+    'Folder {name} is not empty and can not be deleted.' => 'Ordner {$name} enthält Dateien und konnte nicht gelöscht werden.',
     'Form config is missing.' => 'Formular-Konfiguration fehlt.',
+    'Invalid action parameter.' => 'Ungültiger Action-Parameter.',
     'Modified' => 'Geändert',
     'Name cannot be empty.' => 'Name darf nicht leer sein.',
     'Name' => 'Name',
     'Save' => 'Sichern',
     'Size' => 'Grösse',
+    'An error occured at upload.' => 'Beim Upload ist ein Fehler aufgetreten.',
+    'Please choose at least one file.' => 'Bitte eine oder mehrere Dateien auswählen.',
 ];

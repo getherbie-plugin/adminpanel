@@ -13,13 +13,13 @@ class MediaController extends Controller
         $name = strtolower(trim($request->get('name')));
         $path = $this->app['alias']->get('@media/' . $dir . '/' . $name);
         if (empty($name)) {
-            $this->sendErrorHeader('Bitte einen Namen eingeben.');
+            $this->sendErrorHeader($this->t('Name cannot be empty.'));
         }
         if (is_dir($path)) {
-            $this->sendErrorHeader('Ein gleichnamiger Ordner ist schon vorhanden.');
+            $this->sendErrorHeader($this->t('A folder with the same name already exists.'));
         }
         if (!@mkdir($path)) {
-            $this->sendErrorHeader('Ordner konnte nicht erstellt werden.');
+            $this->sendErrorHeader($this->t('Folder {name} can not be created.', ['{name}' => $name]));
         }
         $query->add(['dir' => $dir]);
         return $this->indexAction($query, $request);
@@ -54,12 +54,12 @@ class MediaController extends Controller
         $name = basename($absPath);
 
         if (is_file($absPath) && !@unlink($absPath)) {
-            $this->sendErrorHeader("Datei {$name} konnte nicht gelöscht werden.");
+            $this->sendErrorHeader($this->t('File {file} can not be deleted.', ['{file}' => $name]));
         } elseif (is_dir($absPath) && !@rmdir($absPath)) {
             if (count(scandir($absPath)) >= 2) {
-                $this->sendErrorHeader("Ordner {$name} enthält Dateien und konnte nicht gelöscht werden.");
+                $this->sendErrorHeader($this->t('Folder {name} is not empty and can not be deleted.', ['{name}' => $name]));
             }
-            $this->sendErrorHeader("Ordner {$name} konnte nicht gelöscht werden.");
+            $this->sendErrorHeader($this->t('Folder {name} can not be deleted.', ['{name}' => $name]));
         }
         header('Content-Type: application/json');
         echo json_encode(true);
@@ -79,12 +79,12 @@ class MediaController extends Controller
                 if (move_uploaded_file($file['tmp_name'], $uploaddir . basename($file['name']))) {
                     $files[] = $uploaddir . $file['name'];
                 } else {
-                    $this->sendErrorHeader('Beim Upload ist ein Fehler aufgetreten.');
+                    $this->sendErrorHeader($this->t('An error occured at upload.'));
                 }
             }
             $data = array('files' => $files);
         } else {
-            $this->sendErrorHeader('Bitte eine oder mehrere Dateien auswählen.');
+            $this->sendErrorHeader($this->t('Please choose at least one file.'));
         }
 
         $query->add(['dir' => $dir]);

@@ -7,7 +7,7 @@ class DefaultController extends Controller
     public function errorAction($query)
     {
         if ($this->request->isXmlHttpRequest()) {
-            $this->sendErrorHeader('Ungültiger Action-Parameter');
+            $this->sendErrorHeader($this->t('Invalid action parameter.'));
         }
         return $this->render('default/error.twig', []);
     }
