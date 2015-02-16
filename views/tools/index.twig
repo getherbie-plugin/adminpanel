@@ -1,28 +1,29 @@
 {% extends "@plugin/adminpanel/layouts/main.twig" %}
 
-{% block title %}Werkzeuge{% endblock %}
+{% block title %}{{ translate('adminpanel', 'Tools') }}{% endblock %}
 
 {% block content %}
 
-    <h3>Verzeichnisse</h3>
-    <p>Die folgenden Verzeichnisse können gefahrlos geleert werden.</p>
+    <h3>{{ translate('adminpanel', 'Directories') }}</h3>
+    <p>{{ translate('adminpanel', 'The following directories can be emptied.') }}</p>
     <table class="pure-table pure-table-horizontal">
         {% for key, dir in cacheDirs %}
             <tr>
                 <td>{{ dir.label }}</td>
                 <td><span class="count">{{ dir.count }}</span> Datei(en)</td>
-                <td width="10%"><button class="pure-button button-small delete-cache" data-cache="{{ key }}">Leeren</button></td>
+                <td width="10%"><button class="pure-button button-small delete-cache" data-cache="{{ key }}">{{ translate('adminpanel', 'Empty') }}</button></td>
             </tr>
         {% endfor %}
     </table>
 
-    <h3>YAML-Dateien</h3>
-    <p>Die folgenden YAML-Dateien können neu formatiert werden.</p>
+    <h3>{{ translate('adminpanel', 'YAML files') }}</h3>
+    <h3></h3>
+    <p>{{ translate('adminpanel', 'The following YAML files can be formatted.') }}</p>
     <table class="pure-table pure-table-horizontal">
         {% for key, file in yamlFiles %}
             <tr>
                 <td>{{ file.label }}</td>
-                <td width="10%"><button class="pure-button button-small reformat-file" data-name="{{ key }}">Formatieren</button></td>
+                <td width="10%"><button class="pure-button button-small reformat-file" data-name="{{ key }}">{{ translate('adminpanel', 'Format') }}</button></td>
             </tr>
         {% endfor %}
     </table>

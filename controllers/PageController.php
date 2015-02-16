@@ -27,7 +27,7 @@ class PageController extends Controller
         $title = $request->get('name');
         $parent = $request->get('parent');
         if (empty($title)) {
-            $this->sendErrorHeader("Bitte einen Namen eingeben.");
+            $this->sendErrorHeader($this->t('Name cannot be empty.'));
         }
 
         $filename = FilesystemHelper::sanitizeFilename($title);
@@ -43,12 +43,13 @@ class PageController extends Controller
         }
 
         if (is_file($filepath)) {
-            $this->sendErrorHeader("Eine Seite mit demselben Namen existiert schon.");
+            $this->sendErrorHeader($this->t('A page with the same name already exists.'));
         }
         $eol = PHP_EOL;
-        $data = "---{$eol}title: {$title}{$eol}disabled: 1{$eol}hidden: 1{$eol}---{$eol}Meine neue Seite{$eol}";
+        $pageTitle = $this->t('My new page');
+        $data = "---{$eol}title: {$title}{$eol}disabled: 1{$eol}hidden: 1{$eol}---{$eol}{$pageTitle}{$eol}";
         if (!file_put_contents($filepath, $data)) {
-            $this->sendErrorHeader("Seite konnte nicht erstellt werden.");
+            $this->sendErrorHeader($this->t('Page {name} can not be created.', ['{name}' => $title]));
         }
 
         if (!empty($parent)) {
@@ -63,18 +64,18 @@ class PageController extends Controller
         $filepath = $this->app['alias']->get($file);
         $basename = basename($filepath);
         if (empty($file)) {
-            $this->sendErrorHeader('Ungültige Parameter!');
+            $this->sendErrorHeader($this->t('Invalid parameter!'));
         }
         if (!is_file($filepath)) {
-            $this->sendErrorHeader("Seite {$basename} konnte nicht gefunden werden.");
+            $this->sendErrorHeader($this->t('Page {name} does not exist.', ['{name}' => $basename]));
         }
         $tree = $this->getPageTree()->findBy('path', $file);
         $hasChildren = ($tree && $tree->hasChildren()) ? true : false;
         if ($hasChildren) {
-            $this->sendErrorHeader("Seite {$basename} hat Unterseiten und konnte nicht gelöscht werden.");
+            $this->sendErrorHeader($this->t('Page {name} has sub pages and can not be deleted.', ['{name}' => $basename]));
         }
         if (!@unlink($filepath)) {
-            $this->sendErrorHeader("Seite {$basename} konnte nicht gelöscht werden.");
+            $this->sendErrorHeader($this->t('Page {name} can not be deleted.', ['{name}' => $basename]));
         }
         header('Content-Type: application/json');
         echo json_encode(true);

@@ -15,17 +15,18 @@ class PostController extends Controller
     {
         $title = $request->get('name');
         if (empty($title)) {
-            $this->sendErrorHeader("Bitte einen Namen eingeben.");
+            $this->sendErrorHeader($this->t('Name cannot be empty.'));
         }
         $filename = date('Y-m-d-') . FilesystemHelper::sanitizeFilename($title);
         $filepath = $this->app['alias']->get("@post/{$filename}.md");
         if (is_file($filepath)) {
-            $this->sendErrorHeader("Ein Blogpost mit demselben Namen existiert schon.");
+            $this->sendErrorHeader($this->t('A page with the same name already exists.'));
         }
         $eol = PHP_EOL;
-        $data = "---{$eol}title: {$title}{$eol}disabled: 1{$eol}hidden: 1{$eol}---{$eol}Mein neuer Blogpost{$eol}";
+        $pageTitle = $this->t('My new blog post');
+        $data = "---{$eol}title: {$title}{$eol}disabled: 1{$eol}hidden: 1{$eol}---{$eol}{$pageTitle}{$eol}";
         if (!file_put_contents($filepath, $data)) {
-            $this->sendErrorHeader("Blogpost konnte nicht erstellt werden.");
+            $this->sendErrorHeader($this->t('Page {name} can not be created.', ['{name}' => $title]));
         }
         return $this->indexAction();
     }
@@ -45,13 +46,13 @@ class PostController extends Controller
         $filepath = $this->app['alias']->get($file);
         $basename = basename($filepath);
         if (empty($file)) {
-            $this->sendErrorHeader('Ungültige Parameter!');
+            $this->sendErrorHeader($this->t('Invalid parameter!'));
         }
         if (!is_file($filepath)) {
-            $this->sendErrorHeader("Blogpost {$basename} konnte nicht gefunden werden.");
+            $this->sendErrorHeader($this->t('Page {name} does not exist.', ['{name}' => $basename]));
         }
         if (!@unlink($filepath)) {
-            $this->sendErrorHeader("Blogpost {$basename} konnte nicht gelöscht werden.");
+            $this->sendErrorHeader($this->t('Page {name} can not be deleted.', ['{name}' => $basename]));
         }
         header('Content-Type: application/json');
         echo json_encode(true);

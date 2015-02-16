@@ -10,7 +10,6 @@ class ToolsController extends Controller
 
     public function indexAction($query, $request)
     {
-        #print_r($this->app['config']);
         return $this->render('tools/index.twig', [
             'cacheDirs' => $this->getCacheDirs(),
             'yamlFiles' => $this->getYamlFiles()
@@ -22,7 +21,7 @@ class ToolsController extends Controller
         $name = $request->get('name');
         $dirs = $this->getCacheDirs();
         if (empty($name) || !array_key_exists($name, $dirs)) {
-            $this->sendErrorHeader('Ungültiger Aufruf.');
+            $this->sendErrorHeader($this->t('Invalid parameter!'));
         }
         /**
          * @param $label
@@ -31,14 +30,14 @@ class ToolsController extends Controller
          */
         extract($dirs[$name]);
         if (!is_dir($path)) {
-            $this->sendErrorHeader("{$label} existiert nicht.");
+            $this->sendErrorHeader($this->t('{name} does not exist.', ['{name}' => $label]));
         }
 
         if (!FilesystemHelper::rrmdir($path)) {
-            $this->sendErrorHeader("{$label} wurde nicht oder nur teilweise gelöscht.");
+            $this->sendErrorHeader($this->t('{name} can not be deleted.', ['{name}' => $label]));
         }
 
-        echo "Verzeichnis wurde geleert.";
+        echo $this->t('Folder was emptied.');
         exit;
     }
 
@@ -47,20 +46,20 @@ class ToolsController extends Controller
         $name = $request->get('name');
         $files = $this->getYamlFiles();
         if (empty($name) || !array_key_exists($name, $files)) {
-            $this->sendErrorHeader('Ungültiger Aufruf.');
+            $this->sendErrorHeader($this->t('Invalid parameter!'));
         }
         if (!is_file($files[$name]['path'])) {
-            $this->sendErrorHeader("{$files[$name]['label']} existiert nicht.");
+            $this->sendErrorHeader($this->t('{name} does not exist.', ['{name}' => $files[$name]['label']]));
         }
         if (!FilesystemHelper::createBackupFile($files[$name]['path'])) {
-            $this->sendErrorHeader("Backup-Datei konnte nicht erstellt werden.");
+            $this->sendErrorHeader($this->t('Backup file can not be created.'));
         }
         $parsed = Yaml::parse($files[$name]['path']);
         $content = Yaml::dump($parsed, 100, 4);
         if (!file_put_contents($files[$name]['path'], $content)) {
-            $this->sendErrorHeader("Datei konnte nicht erstellt werden.");
+            $this->sendErrorHeader($this->t('File can not be created.'));
         }
-        echo "Datei wurde neu formatiert.";
+        echo $this->t('File was formatted and saved.');
         exit;
     }
 
@@ -68,11 +67,11 @@ class ToolsController extends Controller
     {
         $config = $this->app['config'];
         $tempDirs = [
-            ['site/data/cache', 'Daten-Cache', $config->get('cache.data.dir')],
-            ['site/page/cache', 'Seiten-Cache', $config->get('cache.page.dir')],
-            ['site/twig/cache', 'Twig-Cache', $config->get('twig.cache')],
-            ['web/assets', 'Web-Assets', $this->app['alias']->get('@web/assets')],
-            ['web/cache', 'Web-Cache', $this->app['alias']->get('@web/cache')]
+            ['site/data/cache', $this->t('Data cache'), $config->get('cache.data.dir')],
+            ['site/page/cache', $this->t('Page cache'), $config->get('cache.page.dir')],
+            ['site/twig/cache', $this->t('Twig cache'), $config->get('twig.cache')],
+            ['web/assets', $this->t('Web assets'), $this->app['alias']->get('@web/assets')],
+            ['web/cache', $this->t('Web cache'), $this->app['alias']->get('@web/cache')]
         ];
         $dirs = [];
         foreach ($tempDirs as $td) {
@@ -94,7 +93,7 @@ class ToolsController extends Controller
         $file = $this->app['alias']->get('@site/config.yml');
         if (is_file($file)) {
             $dirs['config'] = [
-                'label' => 'Site-Config',
+                'label' => $this->t('Site config'),
                 'path' => $file
             ];
         }
