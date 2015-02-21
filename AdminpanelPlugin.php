@@ -49,8 +49,8 @@ class AdminpanelPlugin extends Herbie\Plugin
      */
     public function onPluginsInitialized(Herbie\Event $event)
     {
-        if($this->app['config']->isEmpty('plugins.config.adminpanel.no_page')) {
-            $this->app['config']->push('pages.extra_paths', '@plugin/adminpanel/pages');
+        if($this->config->isEmpty('plugins.config.adminpanel.no_page')) {
+            $this->config->push('pages.extra_paths', '@plugin/adminpanel/pages');
         }
     }
 
