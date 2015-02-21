@@ -49,15 +49,9 @@ class AdminpanelPlugin extends Herbie\Plugin
      */
     public function onPluginsInitialized(Herbie\Event $event)
     {
-        // add admin panel page
-        $alias = $this->getPathAlias();
-        $path = $this->app['alias']->get($alias);
-        $loader = new FrontMatterLoader();
-        $item = $loader->load($path);
-        $item['path'] = $alias;
-        $event['app']['menu']->addItem(
-            new Menu\Page\Item($item)
-        );
+        if($this->app['config']->isEmpty('plugins.config.adminpanel.no_page')) {
+            $this->app['config']->push('pages.extra_paths', '@plugin/adminpanel/pages');
+        }
     }
 
     public function onOutputGenerated(Herbie\Event $event)
