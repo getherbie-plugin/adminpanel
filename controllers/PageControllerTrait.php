@@ -88,7 +88,7 @@ trait PageControllerTrait
             }
         }
 
-        $page = $this->app['pageLoader']->load($path, false, false);
+        $page = $this->app['pageLoader']->load($path, false);
         $data = $page['data'];
 
         // Segment config

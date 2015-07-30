@@ -62,7 +62,7 @@ class PostController extends Controller
     public function editAction($query, $request)
     {
         $path = $query->get('path', null);
-        $page = $this->app['pageLoader']->load($path, false, false);
+        $page = $this->app['pageLoader']->load($path, false);
 
         $unconfig = [];
 
