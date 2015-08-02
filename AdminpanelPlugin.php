@@ -33,7 +33,7 @@ class AdminpanelPlugin extends Herbie\Plugin
     {
         $this->session = new Session();
         $this->session->start();
-        $this->request = $this->app['request'];
+        $this->request = $this->getService('Request');
     }
 
     public function onTwigInitialized(Herbie\Event $event)
@@ -83,9 +83,9 @@ class AdminpanelPlugin extends Herbie\Plugin
             $controllerClass = '\\herbie\\plugin\\adminpanel\\controllers\\' . ucfirst($controller) . 'Controller';
             $method = $action . 'Action';
 
-            $controllerObject = new $controllerClass($this->app, $this->session);
+            $controllerObject = new $controllerClass($this->session);
             if (!method_exists($controllerObject, $method)) {
-                $controllerObject = new controllers\DefaultController($this->app, $this->session);
+                $controllerObject = new controllers\DefaultController($this->session);
                 $method = 'errorAction';
             }
             $controllerObject->controller = $controller;
@@ -99,9 +99,13 @@ class AdminpanelPlugin extends Herbie\Plugin
 
     public function onPageLoaded(Herbie\Event $event)
     {
-        if (empty($this->app['page']->adminpanel)) {
-            $controller = (0 === strpos($this->app['page']->path, '@post')) ? 'post' : 'page';
-            $this->panel = $this->app['twig']->render('@plugin/adminpanel/views/panel.twig', [
+        // @todo Fix infinite loop
+        return;
+        $page = $event['page'];
+        if (empty($page->adminpanel)) {
+            $twig = $this->getService('Twig');
+            $controller = (0 === strpos($page->path, '@post')) ? 'post' : 'page';
+            $this->panel = $twig->environment->render('@plugin/adminpanel/views/panel.twig', [
                 'controller' => $controller
             ]);
         }
@@ -120,7 +124,7 @@ class AdminpanelPlugin extends Herbie\Plugin
 
     protected function isAdmin()
     {
-        return !empty($this->app['menuItem']->adminpanel);
+        return !empty($this->getService('Menu\Item')->adminpanel);
     }
 
     protected function isAuthenticated()

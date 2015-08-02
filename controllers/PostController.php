@@ -18,7 +18,7 @@ class PostController extends Controller
             $this->sendErrorHeader($this->t('Name cannot be empty.'));
         }
         $filename = date('Y-m-d-') . FilesystemHelper::sanitizeFilename($title);
-        $filepath = $this->app['alias']->get("@post/{$filename}.md");
+        $filepath = $this->alias->get("@post/{$filename}.md");
         if (is_file($filepath)) {
             $this->sendErrorHeader($this->t('A page with the same name already exists.'));
         }
@@ -33,17 +33,17 @@ class PostController extends Controller
 
     public function indexAction()
     {
-        $builder = new Menu\Post\Builder($this->app['dataCache'], $this->app['config']);
+        $builder = new Menu\Post\Builder($this->getService('Cache\DataCache'), $this->config);
         return $this->render('post/index.twig', [
             'posts' => $builder->build(),
-            'dir' => $this->app['config']->get('posts.path')
+            'dir' => $this->config->get('posts.path')
         ]);
     }
 
     public function deleteAction($query, $request)
     {
         $file = $request->get('file');
-        $filepath = $this->app['alias']->get($file);
+        $filepath = $this->alias->get($file);
         $basename = basename($filepath);
         if (empty($file)) {
             $this->sendErrorHeader($this->t('Invalid parameter!'));
@@ -62,12 +62,12 @@ class PostController extends Controller
     public function editAction($query, $request)
     {
         $path = $query->get('path', null);
-        $page = $this->app['pageLoader']->load($path, false);
+        $page = $this->getService('Loader\PageLoader')->load($path, false);
 
         $unconfig = [];
 
         // Data config
-        $data = $this->app['config']->get('plugins.config.adminpanel.fields', []);
+        $data = $this->config->get('plugins.config.adminpanel.fields', []);
 
         foreach ($page['data'] as $key => $value) {
             if (!isset($data[$key])) {
@@ -83,7 +83,7 @@ class PostController extends Controller
         }
 
         // Segment config
-        $layouts = $this->app['config']->get('plugins.config.adminpanel.layouts', []);
+        $layouts = $this->config->get('plugins.config.adminpanel.layouts', []);
         $layout = empty($data['layout']['value']) ? 'default.html' : $data['layout']['value'];
         $segments = [];
         foreach ($layouts[$layout] as $pairs) {
@@ -101,7 +101,7 @@ class PostController extends Controller
         if (!empty($_POST)) {
             $postdata = array_merge($request->get('data', []), $unconfig);
             $postsegments = $request->get('segments', []);
-            $this->app['pageLoader']->save($path, $postdata, $postsegments);
+            $this->getService('Loader\PageLoader')->save($path, $postdata, $postsegments);
         }
 
         return $this->render('post/edit.twig', [

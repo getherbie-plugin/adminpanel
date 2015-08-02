@@ -2,24 +2,29 @@
 
 namespace herbie\plugin\adminpanel\controllers;
 
-class Controller
+abstract class Controller
 {
-    protected $app;
+    protected $alias;
+    protected $config;
     protected $request;
     protected $session;
+    protected $twig;
+
     public $controller;
     public $action;
 
-    public function __construct($app, $session)
+    public function __construct($session)
     {
-        $this->app = $app;
+        $this->alias = $this->getService('Alias');
+        $this->config = $this->getService('Config');
+        $this->request = $this->getService('Request');
         $this->session = $session;
-        $this->request = $app['request'];
+        $this->twig = $this->getService('Twig');
     }
 
     protected function render($template, array $params = [])
     {
-        return $this->app['twig']->render(
+        return $this->twig->render(
             '@plugin/adminpanel/views/' . $template,
             $params
         );
@@ -37,6 +42,12 @@ class Controller
 
     protected function t($message, array $params = [])
     {
-        return $this->app['translator']->translate('adminpanel', $message, $params);
+        return $this->getService('Translator')->translate('adminpanel', $message, $params);
     }
+
+    protected function getService($name)
+    {
+        return \Herbie\Application::getService($name);
+    }
+
 }

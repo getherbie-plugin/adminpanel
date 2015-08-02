@@ -11,7 +11,7 @@ class MediaController extends Controller
     {
         $dir = strtolower(trim($request->get('dir')));
         $name = strtolower(trim($request->get('name')));
-        $path = $this->app['alias']->get('@media/' . $dir . '/' . $name);
+        $path = $this->alias->get('@media/' . $dir . '/' . $name);
         if (empty($name)) {
             $this->sendErrorHeader($this->t('Name cannot be empty.'));
         }
@@ -29,8 +29,8 @@ class MediaController extends Controller
     {
         $dir = $query->get('dir', '');
         $dir = str_replace(['../', '..', './', '.'], '', trim($dir, '/'));
-        $path = $this->app['alias']->get('@media/' . $dir);
-        $root = $this->app['alias']->get('@media');
+        $path = $this->alias->get('@media/' . $dir);
+        $root = $this->alias->get('@media');
 
         $iterator = null;
         if (is_readable($path)) {
@@ -50,7 +50,7 @@ class MediaController extends Controller
     {
         $path = $request->get('file');
         $path = str_replace(['../', '..', './'], '', trim($path, '/'));
-        $absPath = $this->app['alias']->get('@media/' . $path);
+        $absPath = $this->alias->get('@media/' . $path);
         $name = basename($absPath);
 
         if (is_file($absPath) && !@unlink($absPath)) {
@@ -74,7 +74,7 @@ class MediaController extends Controller
         if (!empty($_FILES)) {
             $files = array();
 
-            $uploaddir = $this->app['alias']->get("@media/{$dir}/");
+            $uploaddir = $this->alias->get("@media/{$dir}/");
             foreach ($_FILES as $file) {
                 if (move_uploaded_file($file['tmp_name'], $uploaddir . basename($file['name']))) {
                     $files[] = $uploaddir . $file['name'];

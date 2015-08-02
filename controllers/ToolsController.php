@@ -65,13 +65,13 @@ class ToolsController extends Controller
 
     protected function getCacheDirs()
     {
-        $config = $this->app['config'];
+        $config = $this->config;
         $tempDirs = [
             ['site/data/cache', $this->t('Data cache'), $config->get('cache.data.dir')],
             ['site/page/cache', $this->t('Page cache'), $config->get('cache.page.dir')],
             ['site/twig/cache', $this->t('Twig cache'), $config->get('twig.cache')],
-            ['web/assets', $this->t('Web assets'), $this->app['alias']->get('@web/assets')],
-            ['web/cache', $this->t('Web cache'), $this->app['alias']->get('@web/cache')]
+            ['web/assets', $this->t('Web assets'), $this->alias->get('@web/assets')],
+            ['web/cache', $this->t('Web cache'), $this->alias->get('@web/cache')]
         ];
         $dirs = [];
         foreach ($tempDirs as $td) {
@@ -90,7 +90,7 @@ class ToolsController extends Controller
     protected function getYamlFiles()
     {
         $dirs = [];
-        $file = $this->app['alias']->get('@site/config.yml');
+        $file = $this->alias->get('@site/config.yml');
         if (is_file($file)) {
             $dirs['config'] = [
                 'label' => $this->t('Site config'),

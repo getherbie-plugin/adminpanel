@@ -21,18 +21,18 @@ trait PageControllerTrait
     public function dataAction($query, $request)
     {
         $alias = $query->get('path');
-        $path = $this->app['alias']->get($alias);
+        $path = $this->alias->get($alias);
 
-        #$data = $this->app['pageLoader']->load($alias);
+        #$data = $this->getService('Loader\PageLoader')->load($alias);
 
         $loader = new FrontMatterLoader();
         $data = $loader->load($path);
 
         // Readonly
-        $data['alias'] = $alias;
+        $data['Alias'] = $alias;
         $data['path'] = $path;
 
-        $fields = $this->app['config']->get('plugins.config.adminpanel.fields', []);
+        $fields = $this->config->get('plugins.config.adminpanel.fields', []);
         $unconfig = [];
 
         foreach ($data as $key => $value) {
@@ -70,7 +70,7 @@ trait PageControllerTrait
             'controller' => $this->controller,
             'action' => $this->action,
             'cancel' => $query->get('cancel'),
-            'alias' => $alias,
+            'Alias' => $alias,
             'fieldsets' => $fieldsets
         ]);
     }
@@ -78,7 +78,7 @@ trait PageControllerTrait
     public function contentAction($query, $request)
     {
         $alias = $query->get('path', null);
-        $path = $this->app['alias']->get($alias);
+        $path = $this->alias->get($alias);
 
         $saved = false;
         if (!empty($_POST)) {
@@ -88,11 +88,11 @@ trait PageControllerTrait
             }
         }
 
-        $page = $this->app['pageLoader']->load($path, false);
+        $page = $this->getService('Loader\PageLoader')->load($path, false);
         $data = $page['data'];
 
         // Segment config
-        $layouts = $this->app['config']->get('plugins.config.adminpanel.layouts', []);
+        $layouts = $this->config->get('plugins.config.adminpanel.layouts', []);
         $layout = empty($data['layout']) ? 'default.html' : $data['layout'];
 
         $segments = [];

@@ -17,7 +17,7 @@ class PageController extends Controller
             'tree' => $tree,
             'cancel' => $route,
             'breadcrumb' => $route,
-            'dir' => $this->app['config']->get('pages.path'),
+            'dir' => $this->config->get('pages.path'),
             'parent' => $route // for macro.grid.addblock_js()
         ]);
     }
@@ -36,10 +36,10 @@ class PageController extends Controller
         $parentRoute = $this->getPageTree()->findByRoute($parent);
 
         if ($parentRoute->isRoot()) {
-            $filepath = $this->app['alias']->get("@page/{$filename}.md");
+            $filepath = $this->alias->get("@page/{$filename}.md");
         } else {
             $parentAlias = dirname($parentRoute->getMenuItem()->getPath());
-            $filepath = $this->app['alias']->get("{$parentAlias}/{$filename}.md");
+            $filepath = $this->alias->get("{$parentAlias}/{$filename}.md");
         }
 
         if (is_file($filepath)) {
@@ -61,7 +61,7 @@ class PageController extends Controller
     public function deleteAction($query, $request)
     {
         $file = $request->get('file');
-        $filepath = $this->app['alias']->get($file);
+        $filepath = $this->alias->get($file);
         $basename = basename($filepath);
         if (empty($file)) {
             $this->sendErrorHeader($this->t('Invalid parameter!'));
@@ -84,31 +84,31 @@ class PageController extends Controller
 
     protected function getPageTree()
     {
-        $menu = $this->app['pageBuilder']->buildCollection();
+        $menu = $this->getService('Menu\Page\Builder')->buildCollection();
         return Page\Node::buildTree($menu);
     }
 
     protected function redirectBack($path)
     {
-        $item = $this->app['menu']->find($path, 'path');
+        $item = $this->getService('Menu\Page\Collection')->find($path, 'path');
         if (is_null($item)) {
-            $item = $this->app['posts']->find($path, 'path');
+            $item = $this->getService('Menu\Post\Collection')->find($path, 'path');
         }
         if (isset($item)) {
             $route = $item->route;
         } else {
             $route = '';
         }
-        $this->app['twig']->environment->getExtension('herbie')->functionRedirect($route);
+        $this->twig->environment->getExtension('herbie')->functionRedirect($route);
     }
 
     /*public function editAction($query, $request)
     {
         $path = $query->get('path', null);
 
-        $data = $this->app['pageLoader']->load($path, false);
+        $data = $this->getService('Loader\PageLoader')->load($path, false);
 
-        $absPath = $this->app['alias']->get($path);
+        $absPath = $this->alias->get($path);
         $action = strpos($path, '@page') !== false ? 'page/index' : 'post/index';
 
         if(is_null($path)) {
@@ -123,7 +123,7 @@ class PageController extends Controller
             $saved = file_put_contents($absPath, $content);
 
             if ($request->get('button2') !== null) {
-                $this->app['twig']->environment->getExtension('herbie')->functionRedirect('adminpanel?action=' . $action);
+                $this->twig->environment->getExtension('herbie')->functionRedirect('adminpanel?action=' . $action);
             }
 
             if ($request->get('button3') !== null) {

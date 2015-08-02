@@ -10,7 +10,7 @@ class DataController extends Controller
     public function addAction($query, $request)
     {
         $name = strtolower(trim($request->get('name')));
-        $path = $this->app['alias']->get("@site/data/{$name}.yml");
+        $path = $this->alias->get("@site/data/{$name}.yml");
         $dir = dirname($path);
         if (empty($name)) {
             $this->sendErrorHeader($this->t('Name cannot be empty.'));
@@ -32,8 +32,8 @@ class DataController extends Controller
 
     public function indexAction()
     {
-        $dir = $this->app['alias']->get('@site/data/');
-        $data = $this->app['data'];
+        $dir = $this->alias->get('@site/data/');
+        $data = $this->getService('DataArray');
         foreach ($data as $key => $unused) {
             $path = $dir . $key . '.yml';
             $data[$key] = [
@@ -52,7 +52,7 @@ class DataController extends Controller
     public function deleteAction($query, $request)
     {
         $file = $request->get('file');
-        $absPath = $this->app['alias']->get('@site/data/' . $file . '.yml');
+        $absPath = $this->alias->get('@site/data/' . $file . '.yml');
 
         if (!is_file($absPath)) {
             $this->sendErrorHeader($this->t('File {file} does not exist.', ['{file}' => $file]));
@@ -69,17 +69,17 @@ class DataController extends Controller
     public function editAction($query, $request)
     {
         $path = $query->get('path', null);
-        $absPath = $this->app['alias']->get($path);
+        $absPath = $this->alias->get($path);
 
         // Config
         $name = pathinfo($absPath, PATHINFO_FILENAME);
-        $config = $this->app['config']->get('plugins.config.adminpanel.data.' . $name . '.config');
+        $config = $this->config->get('plugins.config.adminpanel.data.' . $name . '.config');
         if (is_null($config)) {
             return $this->editAsString($query, $request);
         }
 
         $saved = false;
-        if ($this->app['request']->getMethod() == 'POST') {
+        if ($this->request->getMethod() == 'POST') {
             $data = $request->get('data', []);
             $content = Yaml::dump(array_values($data), 100, 4);
             $saved = file_put_contents($absPath, $content);
@@ -95,10 +95,10 @@ class DataController extends Controller
     protected function editAsString($query, $request)
     {
         $path = $query->get('path', null);
-        $absPath = $this->app['alias']->get($path);
+        $absPath = $this->alias->get($path);
 
         $saved = false;
-        if ($this->app['request']->getMethod() == 'POST') {
+        if ($this->request->getMethod() == 'POST') {
             $content = $request->get('content', null);
             $saved = file_put_contents($absPath, $content);
         }
