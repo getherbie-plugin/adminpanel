@@ -62,12 +62,15 @@ class AdminpanelPlugin extends Herbie\Plugin
         }
 
         if (!$this->isAdmin()) {
-            if ($this->isAuthenticated() && !empty($this->panel)) {
-                $content = $event['response']->getContent();
-                // replace body tag
+            if ($this->isAuthenticated()) {
+                // prepend adminpanel to html body
+                $controller = (0 === strpos($this->getService('Page')->path, '@post')) ? 'post' : 'page';
+                $panel = $this->getService('Twig')->render('@plugin/adminpanel/views/panel.twig', [
+                    'controller' => $controller
+                ]);
                 $regex = '/<body(.*)>/';
-                $replace = '<body$1>' . $this->panel;
-                $content = preg_replace($regex, $replace, $content);
+                $replace = '<body$1>' . $panel;
+                $content = preg_replace($regex, $replace, $event['response']->getContent());
                 $event['response']->setContent($content);
             }
         } else {
@@ -97,20 +100,6 @@ class AdminpanelPlugin extends Herbie\Plugin
         }
     }
 
-    public function onPageLoaded(Herbie\Event $event)
-    {
-        // @todo Fix infinite loop
-        return;
-        $page = $event['page'];
-        if (empty($page->adminpanel)) {
-            $twig = $this->getService('Twig');
-            $controller = (0 === strpos($page->path, '@post')) ? 'post' : 'page';
-            $this->panel = $twig->environment->render('@plugin/adminpanel/views/panel.twig', [
-                'controller' => $controller
-            ]);
-        }
-    }
-
     /**
      * @return string
      */
@@ -124,7 +113,7 @@ class AdminpanelPlugin extends Herbie\Plugin
 
     protected function isAdmin()
     {
-        return !empty($this->getService('Menu\Item')->adminpanel);
+        return !empty($this->getService('Page')->adminpanel);
     }
 
     protected function isAuthenticated()
