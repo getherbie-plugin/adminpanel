@@ -3,7 +3,7 @@
 namespace herbie\plugin\adminpanel\controllers;
 
 use Herbie\Helper\FilesystemHelper;
-use Symfony\Component\Yaml\Yaml;
+use Herbie\Yaml;
 
 class ToolsController extends Controller
 {
@@ -55,7 +55,7 @@ class ToolsController extends Controller
             $this->sendErrorHeader($this->t('Backup file can not be created.'));
         }
         $parsed = Yaml::parse($files[$name]['path']);
-        $content = Yaml::dump($parsed, 100, 4);
+        $content = Yaml::dump($parsed);
         if (!file_put_contents($files[$name]['path'], $content)) {
             $this->sendErrorHeader($this->t('File can not be created.'));
         }

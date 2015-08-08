@@ -2,7 +2,7 @@
 
 namespace herbie\plugin\adminpanel\controllers;
 
-use Symfony\Component\Yaml\Yaml;
+use Herbie\Yaml;
 
 class DataController extends Controller
 {
@@ -81,13 +81,13 @@ class DataController extends Controller
         $saved = false;
         if ($this->request->getMethod() == 'POST') {
             $data = $request->get('data', []);
-            $content = Yaml::dump(array_values($data), 100, 4);
+            $content = Yaml::dump(array_values($data));
             $saved = file_put_contents($absPath, $content);
         }
 
         return $this->render('data/edit.twig', [
             'config' => $config,
-            'data' => Yaml::parse(file_get_contents($absPath)),
+            'data' => Yaml::parseFile($absPath),
             'saved' => $saved
         ]);
     }
