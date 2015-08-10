@@ -68,11 +68,11 @@ class MediaController extends Controller
 
     public function uploadAction($query, $request)
     {
-        $data = array();
+        $data = [];
         $dir = strtolower(trim($request->get('dir')));
 
         if (!empty($_FILES)) {
-            $files = array();
+            $files = [];
 
             $uploaddir = $this->alias->get("@media/{$dir}/");
             foreach ($_FILES as $file) {
@@ -82,7 +82,7 @@ class MediaController extends Controller
                     $this->sendErrorHeader($this->t('An error occured at upload.'));
                 }
             }
-            $data = array('files' => $files);
+            $data = ['files' => $files];
         } else {
             $this->sendErrorHeader($this->t('Please choose at least one file.'));
         }
