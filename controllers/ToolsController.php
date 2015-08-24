@@ -18,7 +18,7 @@ class ToolsController extends Controller
 
     public function deleteCacheAction($query, $request)
     {
-        $name = $request->get('name');
+        $name = $request->getPost('name');
         $dirs = $this->getCacheDirs();
         if (empty($name) || !array_key_exists($name, $dirs)) {
             $this->sendErrorHeader($this->t('Invalid parameter!'));
@@ -43,7 +43,7 @@ class ToolsController extends Controller
 
     public function reformatFileAction($query, $request)
     {
-        $name = $request->get('name');
+        $name = $request->getPost('name');
         $files = $this->getYamlFiles();
         if (empty($name) || !array_key_exists($name, $files)) {
             $this->sendErrorHeader($this->t('Invalid parameter!'));

@@ -9,8 +9,8 @@ class MediaController extends Controller
 
     public function addFolderAction($query, $request)
     {
-        $dir = strtolower(trim($request->get('dir')));
-        $name = strtolower(trim($request->get('name')));
+        $dir = strtolower(trim($request->getPost('dir')));
+        $name = strtolower(trim($request->getPost('name')));
         $path = $this->alias->get('@media/' . $dir . '/' . $name);
         if (empty($name)) {
             $this->sendErrorHeader($this->t('Name cannot be empty.'));
@@ -27,7 +27,7 @@ class MediaController extends Controller
 
     public function indexAction($query, $request)
     {
-        $dir = $query->get('dir', '');
+        $dir = $query->getQuery('dir', '');
         $dir = str_replace(['../', '..', './', '.'], '', trim($dir, '/'));
         $path = $this->alias->get('@media/' . $dir);
         $root = $this->alias->get('@media');
@@ -48,7 +48,7 @@ class MediaController extends Controller
 
     public function deleteAction($query, $request)
     {
-        $path = $request->get('file');
+        $path = $request->getPost('file');
         $path = str_replace(['../', '..', './'], '', trim($path, '/'));
         $absPath = $this->alias->get('@media/' . $path);
         $name = basename($absPath);
@@ -69,7 +69,7 @@ class MediaController extends Controller
     public function uploadAction($query, $request)
     {
         $data = [];
-        $dir = strtolower(trim($request->get('dir')));
+        $dir = strtolower(trim($request->getPost('dir')));
 
         if (!empty($_FILES)) {
             $files = [];

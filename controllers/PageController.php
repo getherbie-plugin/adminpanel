@@ -11,7 +11,7 @@ class PageController extends Controller
 
     public function indexAction($query, $request)
     {
-        $route = $query->get('route', '');
+        $route = $query->getQuery('route', '');
         $tree = $this->getPageTree()->findByRoute($route);
         return $this->render('page/index.twig', [
             'tree' => $tree,
@@ -24,8 +24,8 @@ class PageController extends Controller
 
     public function addAction($query, $request)
     {
-        $title = $request->get('name');
-        $parent = $request->get('parent');
+        $title = $request->getPost('name');
+        $parent = $request->getPost('parent');
         if (empty($title)) {
             $this->sendErrorHeader($this->t('Name cannot be empty.'));
         }
@@ -60,7 +60,7 @@ class PageController extends Controller
 
     public function deleteAction($query, $request)
     {
-        $file = $request->get('file');
+        $file = $request->getPost('file');
         $filepath = $this->alias->get($file);
         $basename = basename($filepath);
         if (empty($file)) {
@@ -99,12 +99,12 @@ class PageController extends Controller
         } else {
             $route = '';
         }
-        $this->twig->environment->getExtension('herbie')->functionRedirect($route);
+        $this->twig->getEnvironment()->getExtension('herbie')->functionRedirect($route);
     }
 
     /*public function editAction($query, $request)
     {
-        $path = $query->get('path', null);
+        $path = $query->getQuery('path', null);
 
         $data = $this->getService('Loader\PageLoader')->load($path, false);
 
@@ -115,18 +115,18 @@ class PageController extends Controller
             throw new \Exception('Path must be set');
         }
 
-        $data = $request->get('data', file_get_contents($absPath));
-        $content = $request->get('content', file_get_contents($absPath));
+        $data = $request->getPost('data', file_get_contents($absPath));
+        $content = $request->getPost('content', file_get_contents($absPath));
 
         $saved = false;
         if($this->app['request']->getMethod() == 'POST') {
             $saved = file_put_contents($absPath, $content);
 
-            if ($request->get('button2') !== null) {
+            if ($request->getPost('button2') !== null) {
                 $this->twig->environment->getExtension('herbie')->functionRedirect('adminpanel?action=' . $action);
             }
 
-            if ($request->get('button3') !== null) {
+            if ($request->getPost('button3') !== null) {
                 $this->redirectBack($path);
             }
         }

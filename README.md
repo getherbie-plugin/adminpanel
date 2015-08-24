@@ -15,6 +15,9 @@ Danach aktivierst du das Plugin in der Konfigurationsdatei.
         enable:
             - adminpanel
 
+
+## Konfiguration
+
 Das Plugin muss konfiguriert werden. Die Einstellungen unter `plugins/adminpanel/blueprint.yml` müssen manuell 
 in die Konfigurationsdatei eingetragen werden. Füge diese unter `plugins.config.adminpanel` ein:
 

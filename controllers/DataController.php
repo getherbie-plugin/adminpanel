@@ -9,7 +9,7 @@ class DataController extends Controller
 
     public function addAction($query, $request)
     {
-        $name = strtolower(trim($request->get('name')));
+        $name = strtolower(trim($request->getPost('name')));
         $path = $this->alias->get("@site/data/{$name}.yml");
         $dir = dirname($path);
         if (empty($name)) {
@@ -51,7 +51,7 @@ class DataController extends Controller
 
     public function deleteAction($query, $request)
     {
-        $file = $request->get('file');
+        $file = $request->getPost('file');
         $absPath = $this->alias->get('@site/data/' . $file . '.yml');
 
         if (!is_file($absPath)) {
@@ -68,7 +68,7 @@ class DataController extends Controller
 
     public function editAction($query, $request)
     {
-        $path = $query->get('path', null);
+        $path = $query->getQuery('path', null);
         $absPath = $this->alias->get($path);
 
         // Config
@@ -80,7 +80,7 @@ class DataController extends Controller
 
         $saved = false;
         if ($this->request->getMethod() == 'POST') {
-            $data = $request->get('data', []);
+            $data = $request->getPost('data', []);
             $content = Yaml::dump(array_values($data));
             $saved = file_put_contents($absPath, $content);
         }
@@ -94,12 +94,12 @@ class DataController extends Controller
 
     protected function editAsString($query, $request)
     {
-        $path = $query->get('path', null);
+        $path = $query->getQuery('path', null);
         $absPath = $this->alias->get($path);
 
         $saved = false;
         if ($this->request->getMethod() == 'POST') {
-            $content = $request->get('content', null);
+            $content = $request->getPost('content', null);
             $saved = file_put_contents($absPath, $content);
         }
 

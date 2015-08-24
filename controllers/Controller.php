@@ -7,18 +7,16 @@ abstract class Controller
     protected $alias;
     protected $config;
     protected $request;
-    protected $session;
     protected $twig;
 
     public $controller;
     public $action;
 
-    public function __construct($session)
+    public function __construct()
     {
         $this->alias = $this->getService('Alias');
         $this->config = $this->getService('Config');
         $this->request = $this->getService('Request');
-        $this->session = $session;
         $this->twig = $this->getService('Twig');
     }
 

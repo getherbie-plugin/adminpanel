@@ -20,7 +20,7 @@ trait PageControllerTrait
 
     public function dataAction($query, $request)
     {
-        $alias = $query->get('path');
+        $alias = $query->getQuery('path');
         $path = $this->alias->get($alias);
 
         #$data = $this->getService('Loader\PageLoader')->load($alias);
@@ -46,7 +46,7 @@ trait PageControllerTrait
 
         $saved = false;
         if (!empty($_POST)) {
-            $update = array_merge($request->get('data', []), $unconfig);
+            $update = array_merge($request->getPost('data', []), $unconfig);
             $update = ArrayHelper::filterEmptyElements($update);
             if (PageHelper::updateData($path, $update)) {
                 $data = $loader->load($path);
@@ -69,7 +69,7 @@ trait PageControllerTrait
             'saved' => $saved,
             'controller' => $this->controller,
             'action' => $this->action,
-            'cancel' => $query->get('cancel'),
+            'cancel' => $query->getQuery('cancel'),
             'Alias' => $alias,
             'fieldsets' => $fieldsets
         ]);
@@ -77,12 +77,12 @@ trait PageControllerTrait
 
     public function contentAction($query, $request)
     {
-        $alias = $query->get('path', null);
+        $alias = $query->getQuery('path', null);
         $path = $this->alias->get($alias);
 
         $saved = false;
         if (!empty($_POST)) {
-            $segments = $request->get('segments', []);
+            $segments = $request->getPost('segments', []);
             if (PageHelper::updateSegments($path, $segments)) {
                 $saved = true;
             }
@@ -114,7 +114,7 @@ trait PageControllerTrait
             'saved' => $saved,
             'controller' => $this->controller,
             'action' => $this->action,
-            'cancel' => $query->get('cancel')
+            'cancel' => $query->getQuery('cancel')
         ]);
     }
 }

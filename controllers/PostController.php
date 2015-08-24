@@ -13,7 +13,7 @@ class PostController extends Controller
 
     public function addAction($query, $request)
     {
-        $title = $request->get('name');
+        $title = $request->getPost('name');
         if (empty($title)) {
             $this->sendErrorHeader($this->t('Name cannot be empty.'));
         }
@@ -42,7 +42,7 @@ class PostController extends Controller
 
     public function deleteAction($query, $request)
     {
-        $file = $request->get('file');
+        $file = $request->getPost('file');
         $filepath = $this->alias->get($file);
         $basename = basename($filepath);
         if (empty($file)) {
@@ -61,7 +61,7 @@ class PostController extends Controller
 
     public function editAction($query, $request)
     {
-        $path = $query->get('path', null);
+        $path = $query->getQuery('path', null);
         $page = $this->getService('Loader\PageLoader')->load($path, false);
 
         $unconfig = [];
@@ -99,8 +99,8 @@ class PostController extends Controller
         }
 
         if (!empty($_POST)) {
-            $postdata = array_merge($request->get('data', []), $unconfig);
-            $postsegments = $request->get('segments', []);
+            $postdata = array_merge($request->getPost('data', []), $unconfig);
+            $postsegments = $request->getPost('segments', []);
             $this->getService('Loader\PageLoader')->save($path, $postdata, $postsegments);
         }
 
