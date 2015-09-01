@@ -16,7 +16,7 @@
                 var context = $(this);
                 var file = context.attr('data-file');
                 $.ajax({
-                    type: "DELETE",
+                    type: "POST",
                     url: "{{ action }}",
                     data: {file: file},
                     dataType: "json"
