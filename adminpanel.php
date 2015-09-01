@@ -98,7 +98,7 @@ class AdminpanelPlugin
             $controllerObject->controller = $controller;
             $controllerObject->action = $action;
 
-            $params = ['query' => $this->request, 'request' => $this->request];
+            $params = ['request' => $this->request];
             $content = call_user_func_array([$controllerObject, $method], $params);
             $response->setContent($content);
         }

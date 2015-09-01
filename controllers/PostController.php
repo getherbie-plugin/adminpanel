@@ -11,7 +11,7 @@ class PostController extends Controller
 {
     use PageControllerTrait;
 
-    public function addAction($query, $request)
+    public function addAction($request)
     {
         $title = $request->getPost('name');
         if (empty($title)) {
@@ -40,7 +40,7 @@ class PostController extends Controller
         ]);
     }
 
-    public function deleteAction($query, $request)
+    public function deleteAction($request)
     {
         $file = $request->getPost('file');
         $filepath = $this->alias->get($file);
@@ -59,9 +59,9 @@ class PostController extends Controller
         exit;
     }
 
-    public function editAction($query, $request)
+    public function editAction($request)
     {
-        $path = $query->getQuery('path', null);
+        $path = $request->getQuery('path', null);
         $page = $this->getService('Loader\PageLoader')->load($path, false);
 
         $unconfig = [];

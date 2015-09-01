@@ -8,7 +8,7 @@ use Herbie\Yaml;
 class ToolsController extends Controller
 {
 
-    public function indexAction($query, $request)
+    public function indexAction($request)
     {
         return $this->render('tools/index.twig', [
             'cacheDirs' => $this->getCacheDirs(),
@@ -16,7 +16,7 @@ class ToolsController extends Controller
         ]);
     }
 
-    public function deleteCacheAction($query, $request)
+    public function deleteCacheAction($request)
     {
         $name = $request->getPost('name');
         $dirs = $this->getCacheDirs();
@@ -41,7 +41,7 @@ class ToolsController extends Controller
         exit;
     }
 
-    public function reformatFileAction($query, $request)
+    public function reformatFileAction($request)
     {
         $name = $request->getPost('name');
         $files = $this->getYamlFiles();

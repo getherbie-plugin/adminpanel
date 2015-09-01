@@ -18,9 +18,9 @@ use Herbie\Loader\FrontMatterLoader;
 trait PageControllerTrait
 {
 
-    public function dataAction($query, $request)
+    public function dataAction($request)
     {
-        $alias = $query->getQuery('path');
+        $alias = $request->getQuery('path');
         $path = $this->alias->get($alias);
 
         #$data = $this->getService('Loader\PageLoader')->load($alias);
@@ -69,15 +69,15 @@ trait PageControllerTrait
             'saved' => $saved,
             'controller' => $this->controller,
             'action' => $this->action,
-            'cancel' => $query->getQuery('cancel'),
+            'cancel' => $request->getQuery('cancel'),
             'Alias' => $alias,
             'fieldsets' => $fieldsets
         ]);
     }
 
-    public function contentAction($query, $request)
+    public function contentAction($request)
     {
-        $alias = $query->getQuery('path', null);
+        $alias = $request->getQuery('path', null);
         $path = $this->alias->get($alias);
 
         $saved = false;
@@ -114,7 +114,7 @@ trait PageControllerTrait
             'saved' => $saved,
             'controller' => $this->controller,
             'action' => $this->action,
-            'cancel' => $query->getQuery('cancel')
+            'cancel' => $request->getQuery('cancel')
         ]);
     }
 }

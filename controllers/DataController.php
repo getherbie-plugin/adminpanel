@@ -7,7 +7,7 @@ use Herbie\Yaml;
 class DataController extends Controller
 {
 
-    public function addAction($query, $request)
+    public function addAction($request)
     {
         $name = strtolower(trim($request->getPost('name')));
         $path = $this->alias->get("@site/data/{$name}.yml");
@@ -27,7 +27,7 @@ class DataController extends Controller
         if (!fclose(fopen($path, "x"))) {
             $this->sendErrorHeader($this->t('File {name} can not be created.', ['{name}' => $name]));
         }
-        return $this->indexAction($query, $request);
+        return $this->indexAction($request);
     }
 
     public function indexAction()
@@ -49,7 +49,7 @@ class DataController extends Controller
         ]);
     }
 
-    public function deleteAction($query, $request)
+    public function deleteAction($request)
     {
         $file = $request->getPost('file');
         $absPath = $this->alias->get('@site/data/' . $file . '.yml');
@@ -66,16 +66,16 @@ class DataController extends Controller
         exit;
     }
 
-    public function editAction($query, $request)
+    public function editAction($request)
     {
-        $path = $query->getQuery('path', null);
+        $path = $request->getQuery('path', null);
         $absPath = $this->alias->get($path);
 
         // Config
         $name = pathinfo($absPath, PATHINFO_FILENAME);
         $config = $this->config->get('plugins.config.adminpanel.data.' . $name . '.config');
         if (is_null($config)) {
-            return $this->editAsString($query, $request);
+            return $this->editAsString($request);
         }
 
         $saved = false;
@@ -92,9 +92,9 @@ class DataController extends Controller
         ]);
     }
 
-    protected function editAsString($query, $request)
+    protected function editAsString($request)
     {
-        $path = $query->getQuery('path', null);
+        $path = $request->getQuery('path', null);
         $absPath = $this->alias->get($path);
 
         $saved = false;

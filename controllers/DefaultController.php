@@ -4,7 +4,7 @@ namespace herbie\plugin\adminpanel\controllers;
 
 class DefaultController extends Controller
 {
-    public function errorAction($query)
+    public function errorAction($request)
     {
         if ($this->request->isXmlHttpRequest()) {
             $this->sendErrorHeader($this->t('Invalid action parameter.'));
@@ -12,7 +12,7 @@ class DefaultController extends Controller
         return $this->render('default/error.twig', []);
     }
 
-    public function loginAction($query, $request)
+    public function loginAction($request)
     {
         if ($this->request->getMethod() == 'POST') {
             $password = $request->getPost('password', null);

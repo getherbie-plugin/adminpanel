@@ -7,7 +7,7 @@ use Herbie;
 class MediaController extends Controller
 {
 
-    public function addFolderAction($query, $request)
+    public function addFolderAction($request)
     {
         $dir = strtolower(trim($request->getPost('dir')));
         $name = strtolower(trim($request->getPost('name')));
@@ -21,13 +21,13 @@ class MediaController extends Controller
         if (!@mkdir($path)) {
             $this->sendErrorHeader($this->t('Folder {name} can not be created.', ['{name}' => $name]));
         }
-        $query->add(['dir' => $dir]);
-        return $this->indexAction($query, $request);
+        $request->setQuery('dir', $dir);
+        return $this->indexAction($request);
     }
 
-    public function indexAction($query, $request)
+    public function indexAction($request)
     {
-        $dir = $query->getQuery('dir', '');
+        $dir = $request->getQuery('dir', '');
         $dir = str_replace(['../', '..', './', '.'], '', trim($dir, '/'));
         $path = $this->alias->get('@media/' . $dir);
         $root = $this->alias->get('@media');
@@ -46,7 +46,7 @@ class MediaController extends Controller
         ]);
     }
 
-    public function deleteAction($query, $request)
+    public function deleteAction($request)
     {
         $path = $request->getPost('file');
         $path = str_replace(['../', '..', './'], '', trim($path, '/'));
@@ -66,7 +66,7 @@ class MediaController extends Controller
         exit;
     }
 
-    public function uploadAction($query, $request)
+    public function uploadAction($request)
     {
         $data = [];
         $dir = strtolower(trim($request->getPost('dir')));
@@ -87,8 +87,8 @@ class MediaController extends Controller
             $this->sendErrorHeader($this->t('Please choose at least one file.'));
         }
 
-        $query->add(['dir' => $dir]);
-        $data['html'] = $this->indexAction($query, $request);
+        $request->setQuery('dir', $dir);
+        $data['html'] = $this->indexAction($request);
 
         header('Content-Type: application/json');
         echo json_encode($data);

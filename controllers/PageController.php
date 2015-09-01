@@ -9,9 +9,9 @@ class PageController extends Controller
 {
     use PageControllerTrait;
 
-    public function indexAction($query, $request)
+    public function indexAction($request)
     {
-        $route = $query->getQuery('route', '');
+        $route = $request->getQuery('route', '');
         $tree = $this->getPageTree()->findByRoute($route);
         return $this->render('page/index.twig', [
             'tree' => $tree,
@@ -22,7 +22,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function addAction($query, $request)
+    public function addAction($request)
     {
         $title = $request->getPost('name');
         $parent = $request->getPost('parent');
@@ -53,12 +53,12 @@ class PageController extends Controller
         }
 
         if (!empty($parent)) {
-            $query->set('route', $parent);
+            $request->setQuery('route', $parent);
         }
-        return $this->indexAction($query, $request);
+        return $this->indexAction($request);
     }
 
-    public function deleteAction($query, $request)
+    public function deleteAction($request)
     {
         $file = $request->getPost('file');
         $filepath = $this->alias->get($file);
@@ -102,9 +102,9 @@ class PageController extends Controller
         $this->twig->getEnvironment()->getExtension('herbie')->functionRedirect($route);
     }
 
-    /*public function editAction($query, $request)
+    /*public function editAction($request)
     {
-        $path = $query->getQuery('path', null);
+        $path = $request->getQuery('path', null);
 
         $data = $this->getService('Loader\PageLoader')->load($path, false);
 
