@@ -90,7 +90,7 @@ class ToolsController extends Controller
     protected function getYamlFiles()
     {
         $dirs = [];
-        $file = $this->alias->get('@site/config.yml');
+        $file = $this->alias->get('@site/config/main.yml');
         if (is_file($file)) {
             $dirs['config'] = [
                 'label' => $this->t('Site config'),
