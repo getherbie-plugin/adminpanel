@@ -99,7 +99,9 @@ class PageController extends Controller
         } else {
             $route = '';
         }
-        $this->twig->getEnvironment()->getExtension('herbie')->functionRedirect($route);
+        $this->twig->getEnvironment()
+            ->getExtension('herbie\\plugin\\twig\\classes\\HerbieExtension')
+            ->functionRedirect($route);
     }
 
     /*public function editAction($request)
@@ -123,7 +125,9 @@ class PageController extends Controller
             $saved = file_put_contents($absPath, $content);
 
             if ($request->getPost('button2') !== null) {
-                $this->twig->environment->getExtension('herbie')->functionRedirect('adminpanel?action=' . $action);
+                $this->twig->environment
+                    ->getExtension('herbie\\plugin\\twig\\classes\\HerbieExtension')
+                    ->functionRedirect('adminpanel?action=' . $action);
             }
 
             if ($request->getPost('button3') !== null) {

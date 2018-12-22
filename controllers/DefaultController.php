@@ -18,7 +18,9 @@ class DefaultController extends Controller
             $password = $request->getPost('password', null);
             if (md5($password) == $this->config->get('plugins.config.adminpanel.password')) {
                 $_SESSION['LOGGED_IN'] = true;
-                $this->twig->getEnvironment()->getExtension('herbie')->functionRedirect('adminpanel');
+                $this->twig->getEnvironment()
+                    ->getExtension('herbie\\plugin\\twig\\classes\\HerbieExtension')
+                    ->functionRedirect('adminpanel');
             }
         }
         return $this->render('default/login.twig', []);
@@ -27,6 +29,8 @@ class DefaultController extends Controller
     public function logoutAction()
     {
         $_SESSION['LOGGED_IN'] = false;
-        $this->twig->getEnvironment()->getExtension('herbie')->functionRedirect('');
+        $this->twig->getEnvironment()
+            ->getExtension('herbie\\plugin\\twig\\classes\\HerbieExtension')
+            ->functionRedirect('');
     }
 }
