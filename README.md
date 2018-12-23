@@ -1,4 +1,4 @@
-# Herbie Adminpanel Plugin
+# Herbie Adminpanel Plugin [experimentell]
 
 `Adminpanel` ist ein [Herbie](http://github.com/getherbie/herbie) Plugin, das eine einfache Administrationsumgebung 
 bereit stellt.
